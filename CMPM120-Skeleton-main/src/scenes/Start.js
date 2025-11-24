@@ -12,6 +12,7 @@ export class Start extends Phaser.Scene {
     create() {
         this.background = this.add.sprite(640, 320, 'background');
         this.last_time = 0;
+        this.player.health = 0;
     }
 
     update(time) {
