@@ -5,7 +5,7 @@ const config = {
     title: 'CMPM 120 Project Skeleton',
     description: '',
     parent: 'game-container',
-    width: 1280,
+    width: 1270,
     height: 720,
     backgroundColor: '#000000',
     pixelArt: false,
