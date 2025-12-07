@@ -79,6 +79,123 @@ export class BaseLevel extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.collectablesLayer, (p, t) => this.collect(p, t), null, this);
     }
 
+<<<<<<< HEAD:CMPM120-Skeleton-main/src/scenes/BaseLevel.js
+=======
+    setCamera(CAMERA_ZOOM) {
+        this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
+        this.cameras.main.startFollow(this.player, true);
+        this.cameras.main.setDeadzone(100, 50);
+        this.cameras.main.setZoom(CAMERA_ZOOM);
+    }
+
+    setKeyboards() {
+        this.up = this.input.keyboard.addKey("W");
+        this.left = this.input.keyboard.addKey("A");
+        this.right = this.input.keyboard.addKey("D");
+        this.down = this.input.keyboard.addKey("S");
+        // this.jumpKey = this.input.keyboard.addKey("SPACE");
+    }
+
+    damagePlayer(player, tile, time) {
+
+        if (time < this.lastDamageTime + this.damageCoolDown) {
+            return;
+        }
+        this.lastDamageTime = time;
+
+
+        // Bounce 
+        var bounce = 20;
+        if (this.up.isDown) {
+            this.player.setVelocityY(bounce);
+        } else if (this.down.isDown) {
+            this.player.setVelocityY(-bounce);
+        }
+
+
+        if (this.left.isDown) {
+            this.player.setVelocityX(bounce);
+        }
+        else if (this.right.isDown) {
+            this.player.setVelocityX(-bounce);
+        }
+
+        // .
+
+
+        // Take 1 damage (but not below 0)
+        player.health = Math.max(0, player.health - 1);
+
+
+
+        // flash effect
+        player.setTint(0xff5555);
+        this.time.delayedCall(150, () => player.clearTint());
+
+        // this.sound.play('hit');
+
+        // if (player.health <= 0) { this.scene.start("GameOver"); }
+    }
+
+    setPlayerMovement(PLAYER_SPEED, allowToWalk = true) {
+        var can = allowToWalk;
+        if (can === true) {
+            if (this.up.isDown) {
+                this.player.setVelocityY(-PLAYER_SPEED);
+            }
+            else if (this.down.isDown) {
+                this.player.setVelocityY(PLAYER_SPEED);
+            }
+            else {
+                this.player.setVelocityY(0);
+            }
+
+            if (this.left.isDown) {
+                this.player.setVelocityX(-PLAYER_SPEED);
+            }
+            else if (this.right.isDown) {
+                this.player.setVelocityX(PLAYER_SPEED);
+            }
+            else {
+                this.player.setVelocityX(0);
+            }
+        }
+
+    }
+
+    addPlayerAnimation() {
+        this.anims.create({
+            key: 'walk',
+            frames: this.anims.generateFrameNumbers('player', { start: 1, end: 2 }),
+            frameRate: 3,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'idle',
+            frames: [{ key: "player", frame: 0 }],
+            frameRate: 1,
+            repeat: -1
+        });
+    }
+
+    setAnimation() {
+        if (this.right.isDown) {
+            this.player.flipX = false;
+        } else if (this.left.isDown) {
+            this.player.flipX = true;
+        }
+
+        if (this.right.isDown || this.left.isDown || this.up.isDown || this.down.isDown) {
+            this.player.play('walk', true);
+        } else {
+            this.player.play('idle', true);
+        }
+    }
+
+
+>>>>>>> eddcafa (Added player asset, setCamera(), playerMovement(), playerAnimation, setKeyboard()):src/scenes/BaseLevel.js
 
     // Works
     updateAnimatedTiles(delta) {
