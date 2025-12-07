@@ -1,5 +1,6 @@
 export class BaseLevel extends Phaser.Scene {
 
+
     // To edit the maps, go to Maps and open lvl1.tmx or lvl2.tmx. I made an example lvls just for test. You can delete or build on it
 
     constructor(key, mapName) {
@@ -13,6 +14,7 @@ export class BaseLevel extends Phaser.Scene {
         this.load.image('animations', 'assets/animations.png');
         this.load.image('insideSheet1', 'assets/insideSheet1.png');
         this.load.image('outsideSheet1', 'assets/outsideSheet1.png');
+        this.load.spritesheet('player', 'assets/playerSheets.png', { frameWidth: 16 });
 
 
     }
@@ -21,17 +23,34 @@ export class BaseLevel extends Phaser.Scene {
         this.animTimer = 0; // For animated tiles
         this.animFrameDuration = 240; // How fast tiles animates
         this.last_time = 0;
-        // this.player.health = 0; 
-
         this.makeTilemap();
+        // Need to add player sprite first
+        this.setUpPlayer();
+        this.setCamera(3);
+        this.setKeyboards();
+        this.player.health = 0;
+
+        // ----------------------------------------------------
     }
 
     update(time, delta) {
         let dt = (time - this.last_time) / 1000;
         this.last_time = time;
         this.updateAnimatedTiles(delta);
+        this.setAnimation();
+        if (this.time.now < this.lastDamageTime + this.damageCoolDown ) {
+            this.player.play('idle', true);
+            return;
+        } else {
+            this.setPlayerMovement(50);
+        }
+        this.setPlayerMovement(50);
 
+        // this.player.setVelocityX(10);
+
+        // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
     }
+
 
 
     // Haven't test if collisions on obstacle layer and collectables layers works
@@ -63,11 +82,15 @@ export class BaseLevel extends Phaser.Scene {
 
 
     // Not finished: Need player sprite preloaded
-    setupPlayer() {
-        // this.player = this.physics.add.sprite(50, 0, 'player'); 
+    setUpPlayer() {
+        this.lastDamageTime = 0;
+        this.damageCoolDown = 500;
+
+        this.player = this.physics.add.sprite(500, 500, 'player');
         this.player.key = false;
         this.player.coins = 0;
         this.player.health = 0;
+        this.addPlayerAnimation();
 
         // Regular collisions
         this.physics.add.collider(this.player, this.obstaclesLayer);
@@ -79,8 +102,6 @@ export class BaseLevel extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.collectablesLayer, (p, t) => this.collect(p, t), null, this);
     }
 
-<<<<<<< HEAD:CMPM120-Skeleton-main/src/scenes/BaseLevel.js
-=======
     setCamera(CAMERA_ZOOM) {
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
@@ -121,7 +142,7 @@ export class BaseLevel extends Phaser.Scene {
             this.player.setVelocityX(-bounce);
         }
 
-        // .
+        //
 
 
         // Take 1 damage (but not below 0)
@@ -195,7 +216,6 @@ export class BaseLevel extends Phaser.Scene {
     }
 
 
->>>>>>> eddcafa (Added player asset, setCamera(), playerMovement(), playerAnimation, setKeyboard()):src/scenes/BaseLevel.js
 
     // Works
     updateAnimatedTiles(delta) {

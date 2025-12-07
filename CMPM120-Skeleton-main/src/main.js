@@ -17,7 +17,7 @@ const config = {
                 x: 0,
                 y: 0
             },
-            debug: true
+            debug: false
         }
     },
     scene: [/*GameMenu,*/ Level1, Level2 /*, Win, GameOver */],
