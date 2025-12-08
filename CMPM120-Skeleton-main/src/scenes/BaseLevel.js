@@ -14,6 +14,14 @@ export class BaseLevel extends Phaser.Scene {
         this.load.image('animations', 'assets/animations.png');
         this.load.image('insideSheet1', 'assets/insideSheet1.png');
         this.load.image('outsideSheet1', 'assets/outsideSheet1.png');
+        this.load.image('Knight_1', 'assets/Knight_1.png');
+        this.load.image('Knight_2', 'assets/Knight_2.png');
+        this.load.image('NPC_1', 'assets/NPC_1.png');
+        this.load.image('NPC_2', 'assets/NPC_2.png');
+        this.load.image('NPC_3', 'assets/NPC_3.png');
+        this.load.image('NPC_4', 'assets/NPC_4.png');
+        // this.load.image('outsideSheet1', 'assets/.png');
+        // this.load.image('outsideSheet1', 'assets/.png');
         this.load.spritesheet('player', 'assets/playerSheets.png', { frameWidth: 16 });
     }
 
@@ -25,6 +33,7 @@ export class BaseLevel extends Phaser.Scene {
         this.setKeyboards();
         this.setUpPlayer();
         this.setCamera(3);
+        this.setUpNPCs();
 
         // ----------------------------------------------------
     }
@@ -42,12 +51,20 @@ export class BaseLevel extends Phaser.Scene {
         }
         this.setPlayerMovement(50);
 
+
+
+
+
+
+
         // this.player.setVelocityX(10);
 
         // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
         console.log("Coins: " + this.player.coins + "\nHearts: " + this.player.health);
         // console.log(this.player.health);
     }
+
+
 
 
     // Haven't test if collisions on obstacle layer and collectables layers works
@@ -58,10 +75,12 @@ export class BaseLevel extends Phaser.Scene {
         const tsOutside = this.map.addTilesetImage('outsideSheet1', 'outsideSheet1');
         const tsAn = this.map.addTilesetImage('animations', 'animations');
 
+        // No collision, only visuals
         this.map.createLayer("background", [tsInside, tsOutside, tsAn], 0, 0);
         this.map.createLayer("decorationA", [tsInside, tsOutside, tsAn], 0, 0);
         this.map.createLayer("decorationB", [tsInside, tsOutside, tsAn], 0, 0);
         this.map.createLayer("decorationC", [tsInside, tsOutside, tsAn], 0, 0);
+
 
 
         // Collision tiles
@@ -75,6 +94,29 @@ export class BaseLevel extends Phaser.Scene {
         // Collectables
         this.collectablesLayer = this.map.createLayer("collectables", [tsInside, tsOutside, tsAn], 0, 0);
         this.collectablesLayer.setCollisionByExclusion([-1], true);
+
+
+
+
+    }
+
+    setUpNPCs() {
+        this.npcs = this.add.group();
+
+        this.NPC_1 = this.addNPC("NPC_1", 500, 600);
+        this.Knight_1 = this.addNPC("Knight_1", 550, 600);
+
+
+
+    }
+    addNPC(name, x, y) {
+        let npc = this.physics.add.sprite(x, y, `${name}`)
+        this.npcs.add(npc);
+        this.physics.add.collider(this.player, npc, () => {
+            console.log("Player walked over NPC zone");
+        });
+        npc.setImmovable(true);
+        return npc;
     }
 
 
@@ -83,6 +125,9 @@ export class BaseLevel extends Phaser.Scene {
         this.lastDamageTime = 0;
         this.damageCoolDown = 500;
         this.player = this.physics.add.sprite(500, 500, 'player');
+        this.player.setSize(10, 10);
+        // this.player.setOffset(0, 0);
+
         this.player.key = false;
         this.player.coins = 0;
         this.player.health = 10;
@@ -96,6 +141,7 @@ export class BaseLevel extends Phaser.Scene {
 
         // Collectables overlap with player calls collect function
         this.physics.add.overlap(this.player, this.collectablesLayer, (p, t) => this.collect(p, t), null, this);
+
     }
 
     setCamera(CAMERA_ZOOM) {
@@ -219,7 +265,7 @@ export class BaseLevel extends Phaser.Scene {
             this.player.flipX = true;
         }
 
-        if(this.shift.isDown){
+        if (this.shift.isDown) {
             this.player.play('sprint', true);
         }
         else if (this.right.isDown || this.left.isDown || this.up.isDown || this.down.isDown) {
@@ -228,6 +274,9 @@ export class BaseLevel extends Phaser.Scene {
             this.player.play('idle', true);
         }
     }
+
+
+
 
 
 
@@ -278,4 +327,9 @@ export class BaseLevel extends Phaser.Scene {
 
     }
 
+
+
+
 }
+
+
