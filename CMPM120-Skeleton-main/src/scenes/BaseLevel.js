@@ -15,8 +15,6 @@ export class BaseLevel extends Phaser.Scene {
         this.load.image('insideSheet1', 'assets/insideSheet1.png');
         this.load.image('outsideSheet1', 'assets/outsideSheet1.png');
         this.load.spritesheet('player', 'assets/playerSheets.png', { frameWidth: 16 });
-
-
     }
 
     create() {
@@ -24,11 +22,9 @@ export class BaseLevel extends Phaser.Scene {
         this.animFrameDuration = 240; // How fast tiles animates
         this.last_time = 0;
         this.makeTilemap();
-        // Need to add player sprite first
+        this.setKeyboards();
         this.setUpPlayer();
         this.setCamera(3);
-        this.setKeyboards();
-        this.player.health = 0;
 
         // ----------------------------------------------------
     }
@@ -38,7 +34,7 @@ export class BaseLevel extends Phaser.Scene {
         this.last_time = time;
         this.updateAnimatedTiles(delta);
         this.setAnimation();
-        if (this.time.now < this.lastDamageTime + this.damageCoolDown ) {
+        if (this.time.now < this.lastDamageTime + this.damageCoolDown) {
             this.player.play('idle', true);
             return;
         } else {
@@ -49,8 +45,9 @@ export class BaseLevel extends Phaser.Scene {
         // this.player.setVelocityX(10);
 
         // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
+        console.log("Coins: " + this.player.coins + "\nHearts: " + this.player.health);
+        // console.log(this.player.health);
     }
-
 
 
     // Haven't test if collisions on obstacle layer and collectables layers works
@@ -81,15 +78,14 @@ export class BaseLevel extends Phaser.Scene {
     }
 
 
-    // Not finished: Need player sprite preloaded
+    // Need to add health and collectables
     setUpPlayer() {
         this.lastDamageTime = 0;
         this.damageCoolDown = 500;
-
         this.player = this.physics.add.sprite(500, 500, 'player');
         this.player.key = false;
         this.player.coins = 0;
-        this.player.health = 0;
+        this.player.health = 10;
         this.addPlayerAnimation();
 
         // Regular collisions
@@ -115,6 +111,7 @@ export class BaseLevel extends Phaser.Scene {
         this.left = this.input.keyboard.addKey("A");
         this.right = this.input.keyboard.addKey("D");
         this.down = this.input.keyboard.addKey("S");
+        this.shift = this.input.keyboard.addKey("SHIFT");
         // this.jumpKey = this.input.keyboard.addKey("SPACE");
     }
 
@@ -160,36 +157,50 @@ export class BaseLevel extends Phaser.Scene {
     }
 
     setPlayerMovement(PLAYER_SPEED, allowToWalk = true) {
+        var speed = PLAYER_SPEED;
         var can = allowToWalk;
+        if (this.shift.isDown) {
+            speed = 85;
+        } else {
+            speed = 50;
+        }
+        console.log();
+
         if (can === true) {
             if (this.up.isDown) {
-                this.player.setVelocityY(-PLAYER_SPEED);
+                this.player.setVelocityY(-speed);
             }
             else if (this.down.isDown) {
-                this.player.setVelocityY(PLAYER_SPEED);
+                this.player.setVelocityY(speed);
             }
             else {
                 this.player.setVelocityY(0);
             }
 
             if (this.left.isDown) {
-                this.player.setVelocityX(-PLAYER_SPEED);
+                this.player.setVelocityX(-speed);
             }
             else if (this.right.isDown) {
-                this.player.setVelocityX(PLAYER_SPEED);
+                this.player.setVelocityX(speed);
             }
             else {
                 this.player.setVelocityX(0);
             }
         }
-
     }
 
     addPlayerAnimation() {
         this.anims.create({
             key: 'walk',
             frames: this.anims.generateFrameNumbers('player', { start: 1, end: 2 }),
-            frameRate: 3,
+            frameRate: 6,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'sprint',
+            frames: this.anims.generateFrameNumbers('player', { start: 1, end: 2 }),
+            frameRate: 9,
             repeat: -1
         });
 
@@ -208,7 +219,10 @@ export class BaseLevel extends Phaser.Scene {
             this.player.flipX = true;
         }
 
-        if (this.right.isDown || this.left.isDown || this.up.isDown || this.down.isDown) {
+        if(this.shift.isDown){
+            this.player.play('sprint', true);
+        }
+        else if (this.right.isDown || this.left.isDown || this.up.isDown || this.down.isDown) {
             this.player.play('walk', true);
         } else {
             this.player.play('idle', true);
@@ -253,10 +267,11 @@ export class BaseLevel extends Phaser.Scene {
         // check if tile has a property 'Coins'equal to true
         if (tile.properties.Coins === true) {
             player.coins++;
-            this.sound.play('coin');
-            this.coin += 1
-            this.coinText.setText('coin: ' + this.coin);
-            this.registry.set(REG_coin, this.coin);
+
+            // this.sound.play('coin'); 
+            // this.coinText.setText('coin: ' + this.coin);
+            // this.registry.set(REG_coin, this.coin);
+
             this.collectablesLayer.removeTileAt(tile.x, tile.y);
             return false;
         }
