@@ -317,7 +317,7 @@
  <tileset firstgid="1840" name="outsideSheet1" tilewidth="16" tileheight="16" spacing="1" tilecount="132" columns="12">
   <image source="../assets/outsideSheet1.png" trans="000000" width="203" height="186"/>
  </tileset>
- <tileset firstgid="1972" name="player4" tilewidth="16" tileheight="16" tilecount="3" columns="3">
+ <tileset firstgid="1972" name="player4" tilewidth="16" tileheight="16" tilecount="1" columns="3">
   <image source="../../../Tile_Editor/player/player4.png" trans="000000" width="48" height="16"/>
   <tile id="0">
    <animation>
