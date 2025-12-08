@@ -59,21 +59,22 @@ export class BaseLevel extends Phaser.Scene {
         const tsAn = this.map.addTilesetImage('animations', 'animations');
 
         this.map.createLayer("background", [tsInside, tsOutside, tsAn], 0, 0);
-        this.map.createLayer("decorationA", [tsInside, tsOutside, tsAn], 0, 0);
-        this.map.createLayer("decorationB", [tsInside, tsOutside, tsAn], 0, 0);
         this.map.createLayer("decorationC", [tsInside, tsOutside, tsAn], 0, 0);
+        this.obstaclesLayer = this.map.createLayer("obstacles", [tsInside, tsOutside, tsAn], 0, 0);
+        this.map.createLayer("decorationB", [tsInside, tsOutside, tsAn], 0, 0);
+        this.damageLayer = this.map.createLayer("damageLayer", [tsInside, tsOutside, tsAn], 0, 0);
+        this.map.createLayer("decorationA", [tsInside, tsOutside, tsAn], 0, 0);
+        this.collectablesLayer = this.map.createLayer("collectables", [tsInside, tsOutside, tsAn], 0, 0);
+        
 
 
         // Collision tiles
-        this.obstaclesLayer = this.map.createLayer("obstacles", [tsInside, tsOutside, tsAn], 0, 0);
         this.obstaclesLayer.setCollisionByExclusion([-1]);
 
         // Damage tiles
-        this.damageLayer = this.map.createLayer("damageLayer", [tsInside, tsOutside, tsAn], 0, 0);
         this.damageLayer.setCollisionByExclusion([-1], true);
 
         // Collectables
-        this.collectablesLayer = this.map.createLayer("collectables", [tsInside, tsOutside, tsAn], 0, 0);
         this.collectablesLayer.setCollisionByExclusion([-1], true);
     }
 
