@@ -1,9 +1,10 @@
 import { Level1 } from "./scenes/Level1.js";
 import { Level2 } from "./scenes/Level2.js";
+import { librarySub } from "./scenes/librarySub.js";
 
 const config = {
     type: Phaser.AUTO,
-    title: 'CMPM 120 Project Skeleton',
+    title: 'CMPM 120 Project 4',
     description: '',
     parent: 'game-container',
     width: 1280,
@@ -20,7 +21,7 @@ const config = {
             debug: true
         }
     },
-    scene: [/*GameMenu,*/ Level1, Level2 /*, Win, GameOver */],
+    scene: [/*GameMenu,*/ Level1, librarySub, Level2 /*, Win, GameOver */],
     scale: {
         mode: Phaser.Scale.ENVELOP,
         autoCenter: Phaser.Scale.CENTER_BOTH
