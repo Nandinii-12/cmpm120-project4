@@ -17,7 +17,10 @@ export class BaseLevel extends Phaser.Scene {
         this.load.image('NPC_2', 'assets/NPC_2.png');
         this.load.image('NPC_3', 'assets/NPC_3.png');
         this.load.image('NPC_4', 'assets/NPC_4.png');
-        // this.load.image('outsideSheet1', 'assets/.png');
+        this.load.image('attackLine1', 'assets/attackLine1.png');
+        this.load.image('attackLine2', 'assets/attackLine2.png');
+        this.load.image('attackLine3', 'assets/attackLine3.png');
+
         // this.load.image('outsideSheet1', 'assets/.png');
         this.load.spritesheet('player', 'assets/playerSheets.png', { frameWidth: 16 });
     }
@@ -26,6 +29,7 @@ export class BaseLevel extends Phaser.Scene {
         this.animTimer = 0; // For animated tiles
         this.animFrameDuration = 240; // How fast tiles animates
         this.last_time = 0;
+
         this.makeTilemap();
         this.setKeyboards();
         this.setUpPlayer();
@@ -48,7 +52,7 @@ export class BaseLevel extends Phaser.Scene {
         this.setInteractionArea();
 
         // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
-        console.log("Health: " + this.player.health +  "\nCoins: " + this.player.coins + "\nHearts: " + this.player.health);
+        console.log("Health: " + this.player.health + "\nCoins: " + this.player.coins + "\nHearts: " + this.player.health);
         // console.log(this.player.body.velocity.x, this.player.body.velocity.y)
     }
 
@@ -108,9 +112,17 @@ export class BaseLevel extends Phaser.Scene {
     }
 
     setUpPlayer() {
+        this.player = this.physics.add.sprite(300, 1040, 'player');
+        this.player.lastDir = new Phaser.Math.Vector2(1, 0); // default facing right
+        this.attackHitbox = this.physics.add.image(0, 0, 'attackLine1');
+        this.attackHitbox.setDisplaySize(16, 24);
+        this.attackHitbox.setVisible(false);
+        this.attackHitbox.setActive(false);
+        this.attackHitbox.setImmovable(true);
         this.lastDamageTime = 0;
         this.damageCoolDown = 500;
-        this.player = this.physics.add.sprite(300, 1040, 'player');
+        this.isAttacking = false;
+
         this.player.setSize(10, 10);
         // this.player.setOffset(0, 0);
 
@@ -145,7 +157,7 @@ export class BaseLevel extends Phaser.Scene {
         this.down = this.input.keyboard.addKey("S");
         this.shift = this.input.keyboard.addKey("SHIFT");
         this.interact = this.input.keyboard.addKey("E");
-        // this.jumpKey = this.input.keyboard.addKey("SPACE");
+        this.attack = this.input.keyboard.addKey("SPACE");
     }
 
     damagePlayer(player, tile, time) {
@@ -192,11 +204,11 @@ export class BaseLevel extends Phaser.Scene {
         }
 
         if (this.shift.isDown) {
-            speed = speed *1.5
+            speed = speed * 1.5
         } else {
             speed = speed;
         }
-        
+
         if (can === true) {
             if (this.up.isDown) {
                 this.player.setVelocityY(-speed);
@@ -236,6 +248,13 @@ export class BaseLevel extends Phaser.Scene {
         });
 
         this.anims.create({
+            key: 'attack',
+            frames: [{ key: "player", frame: 3 }],
+            frameRate: 1,
+            repeat: -1
+        });
+
+        this.anims.create({
             key: 'idle',
             frames: [{ key: "player", frame: 0 }],
             frameRate: 1,
@@ -244,21 +263,58 @@ export class BaseLevel extends Phaser.Scene {
     }
 
     setAnimation() {
-        if (this.right.isDown) {
-            this.player.flipX = false;
-        } else if (this.left.isDown) {
-            this.player.flipX = true;
+
+        // 1. If already attacking, prevent walk/sprint from overriding it
+        if (this.isAttacking) return;
+
+        // 2. Attack input
+        if (Phaser.Input.Keyboard.JustDown(this.attack) && !this.isAttacking) {
+            this.isAttacking = true;
+            this.player.play("attack", true);
+            this.attacking();
+
+            this.time.delayedCall(200, () => {
+                this.player.play("idle", true);
+                this.isAttacking = false;
+            });
+            return;
         }
 
+        // 3. Facing + lastDir update
+        if (this.right.isDown) {
+            this.player.flipX = false;
+            this.player.lastDir.set(1, 0);
+        }
+        else if (this.left.isDown) {
+            this.player.flipX = true;
+            this.player.lastDir.set(-1, 0);
+        }
+
+        if (this.up.isDown) {
+            this.player.lastDir.set(0, -1);
+        }
+        else if (this.down.isDown) {
+            this.player.lastDir.set(0, 1);
+        }
+
+        // 4. Movement animations
         if (this.shift.isDown) {
             this.player.play('sprint', true);
         }
-        else if (this.right.isDown || this.left.isDown || this.up.isDown || this.down.isDown) {
+        else if (
+            this.right.isDown ||
+            this.left.isDown ||
+            this.up.isDown ||
+            this.down.isDown
+        ) {
             this.player.play('walk', true);
-        } else {
+        }
+        else {
             this.player.play('idle', true);
         }
     }
+
+
 
     updateAnimatedTiles(delta) {
         this.animTimer += delta;
@@ -301,5 +357,51 @@ export class BaseLevel extends Phaser.Scene {
             this.collectablesLayer.removeTileAt(tile.x, tile.y);
             return false;
         }
+    }
+
+    attacking() {
+        let dir = this.player.lastDir.clone().normalize();
+        this.attackHitbox.setTexture('attackLine1');
+
+        let hbx = 48;
+        let hby = 64;
+
+        const distance = 16; // 8 tiles away (assuming 16px tiles)
+
+        // Position PNG in front of player
+        this.attackHitbox.x = this.player.x + dir.x * distance;
+        this.attackHitbox.y = this.player.y + dir.y * distance;
+
+        // --- HITBOX SIZE BASED ON DIRECTION ---
+        if (Math.abs(dir.x) > Math.abs(dir.y)) {
+            // Facing LEFT or RIGHT
+            // Use original size (32 W × 64 H)
+            this.attackHitbox.setSize(hbx, hby);
+        } else {
+            // Facing UP or DOWN
+            // Swap width and height (64 W × 32 H)
+            this.attackHitbox.setSize(hby, hbx);
+        }
+
+        // OPTIONAL: rotate sprite visually, if needed  
+        this.attackHitbox.angle = Phaser.Math.RadToDeg(dir.angle());
+
+        // Activate hitbox
+        this.attackHitbox.setVisible(true);
+        this.attackHitbox.setActive(true);
+
+        this.time.delayedCall(50, () => {
+            this.attackHitbox.setTexture('attackLine2');
+        });
+
+        this.time.delayedCall(100, () => {
+            this.attackHitbox.setTexture('attackLine3');
+        });
+
+        // Hide after 200ms
+        this.time.delayedCall(200, () => {
+            this.attackHitbox.setVisible(false);
+            this.attackHitbox.setActive(false);
+        });
     }
 }
