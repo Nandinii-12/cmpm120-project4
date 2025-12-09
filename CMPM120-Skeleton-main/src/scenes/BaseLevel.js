@@ -1,8 +1,5 @@
 export class BaseLevel extends Phaser.Scene {
-
-
     // To edit the maps, go to Maps and open lvl1.tmx or lvl2.tmx. I made an example lvls just for test. You can delete or build on it
-
     constructor(key, mapName) {
         super(key);
         this.mapName = mapName;
@@ -34,8 +31,6 @@ export class BaseLevel extends Phaser.Scene {
         this.setUpPlayer();
         this.setCamera(3);
         this.setUpNPCs();
-
-        // ----------------------------------------------------
     }
 
     update(time, delta) {
@@ -50,25 +45,13 @@ export class BaseLevel extends Phaser.Scene {
             this.setPlayerMovement(50);
         }
         this.setPlayerMovement(50);
-
         this.setInteractionArea();
 
-
-
-
-
-        // this.player.setVelocityX(10);
-
         // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
-        // console.log("Coins: " + this.player.coins + "\nHearts: " + this.player.health);
-        // console.log(this.player.health);
-        console.log(this.player.body.velocity.x, this.player.body.velocity.y)
+        console.log("Health: " + this.player.health +  "\nCoins: " + this.player.coins + "\nHearts: " + this.player.health);
+        // console.log(this.player.body.velocity.x, this.player.body.velocity.y)
     }
 
-
-
-
-    // Haven't test if collisions on obstacle layer and collectables layers works
     makeTilemap() {
         this.map = this.add.tilemap(this.mapName);
 
@@ -85,9 +68,6 @@ export class BaseLevel extends Phaser.Scene {
         this.map.createLayer("decorationA", [tsInside, tsOutside, tsAn], 0, 0);
         this.collectablesLayer = this.map.createLayer("collectables", [tsInside, tsOutside, tsAn], 0, 0);
 
-
-
-
         // Collision tiles
         this.obstaclesLayer.setCollisionByExclusion([-1]);
 
@@ -96,20 +76,12 @@ export class BaseLevel extends Phaser.Scene {
 
         // Collectables
         this.collectablesLayer.setCollisionByExclusion([-1], true);
-
-
-
-
     }
 
     setUpNPCs() {
         this.npcs = this.add.group();
-
         this.NPC_1 = this.addNPC("NPC_1", 500, 600, "I Need help finding...");
         this.Knight_1 = this.addNPC("Knight_1", 550, 600);
-
-
-
     }
     addNPC(name, x, y, message = "Hello there!") {
         let npc = this.physics.add.sprite(x, y, `${name}`)
@@ -135,7 +107,6 @@ export class BaseLevel extends Phaser.Scene {
         }
     }
 
-    // Need to add health and collectables
     setUpPlayer() {
         this.lastDamageTime = 0;
         this.damageCoolDown = 500;
@@ -167,8 +138,6 @@ export class BaseLevel extends Phaser.Scene {
         this.cameras.main.setZoom(CAMERA_ZOOM);
     }
 
-
-
     setKeyboards() {
         this.up = this.input.keyboard.addKey("W");
         this.left = this.input.keyboard.addKey("A");
@@ -186,7 +155,6 @@ export class BaseLevel extends Phaser.Scene {
         }
         this.lastDamageTime = time;
 
-
         // Bounce 
         var bounce = 20;
         if (this.up.isDown) {
@@ -195,7 +163,6 @@ export class BaseLevel extends Phaser.Scene {
             this.player.setVelocityY(-bounce);
         }
 
-
         if (this.left.isDown) {
             this.player.setVelocityX(bounce);
         }
@@ -203,13 +170,8 @@ export class BaseLevel extends Phaser.Scene {
             this.player.setVelocityX(-bounce);
         }
 
-        //
-
-
         // Take 1 damage (but not below 0)
         player.health = Math.max(0, player.health - 1);
-
-
 
         // flash effect
         player.setTint(0xff5555);
@@ -234,12 +196,8 @@ export class BaseLevel extends Phaser.Scene {
         } else {
             speed = speed;
         }
-        console.log();
-
+        
         if (can === true) {
-
-
-
             if (this.up.isDown) {
                 this.player.setVelocityY(-speed);
             }
@@ -302,12 +260,6 @@ export class BaseLevel extends Phaser.Scene {
         }
     }
 
-
-
-
-
-
-    // Works
     updateAnimatedTiles(delta) {
         this.animTimer += delta;
         if (this.animTimer < this.animFrameDuration) return;
@@ -336,10 +288,8 @@ export class BaseLevel extends Phaser.Scene {
         });
     }
 
-    // Untested
     collect(player, tile) {
         if (!tile.properties) return false;
-
         // check if tile has a property 'Coins'equal to true
         if (tile.properties.Coins === true) {
             player.coins++;
@@ -351,12 +301,5 @@ export class BaseLevel extends Phaser.Scene {
             this.collectablesLayer.removeTileAt(tile.x, tile.y);
             return false;
         }
-
     }
-
-
-
-
 }
-
-
