@@ -138,7 +138,7 @@ export class BaseLevel extends Phaser.Scene {
     setUpPlayer() {
         this.lastDamageTime = 0;
         this.damageCoolDown = 500;
-        this.player = this.physics.add.sprite(500, 500, 'player');
+        this.player = this.physics.add.sprite(300, 1040, 'player');
         this.player.setSize(10, 10);
         // this.player.setOffset(0, 0);
 

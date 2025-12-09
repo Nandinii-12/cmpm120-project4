@@ -169,6 +169,20 @@
          "tileheight":16,
          "tilewidth":16,
          "transparentcolor":"#ff00ff"
+        }, 
+        {
+         "columns":18,
+         "firstgid":1768,
+         "image":"..\/assets\/animations.png",
+         "imageheight":96,
+         "imagewidth":288,
+         "margin":0,
+         "name":"animations",
+         "spacing":0,
+         "tilecount":108,
+         "tileheight":16,
+         "tilewidth":16,
+         "transparentcolor":"#ff00ff"
         }],
  "tilewidth":16,
  "type":"map",
