@@ -62,6 +62,7 @@ export class BaseLevel extends Phaser.Scene {
         // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
         // console.log("Coins: " + this.player.coins + "\nHearts: " + this.player.health);
         // console.log(this.player.health);
+        console.log(this.player.body.velocity.x, this.player.body.velocity.y)
     }
 
 
@@ -222,14 +223,23 @@ export class BaseLevel extends Phaser.Scene {
     setPlayerMovement(PLAYER_SPEED, allowToWalk = true) {
         var speed = PLAYER_SPEED;
         var can = allowToWalk;
-        if (this.shift.isDown) {
-            speed = 85;
+        if ((this.down.isDown || this.up.isDown) && (this.left.isDown || this.right.isDown)) {
+            speed = PLAYER_SPEED / Math.sqrt(2);
         } else {
-            speed = 50;
+            speed = PLAYER_SPEED;
+        }
+
+        if (this.shift.isDown) {
+            speed = speed *1.5
+        } else {
+            speed = speed;
         }
         console.log();
 
         if (can === true) {
+
+
+
             if (this.up.isDown) {
                 this.player.setVelocityY(-speed);
             }
