@@ -1,12 +1,4 @@
 { "compressionlevel":-1,
- "editorsettings":
-    {
-     "export":
-        {
-         "format":"json",
-         "target":"lvl2.tmj"
-        }
-    },
  "height":80,
  "infinite":false,
  "layers":[
@@ -1322,33 +1314,6 @@
          "spacing":1,
          "tilecount":132,
          "tileheight":16,
-         "tilewidth":16,
-         "transparentcolor":"#000000"
-        }, 
-        {
-         "columns":3,
-         "firstgid":2008,
-         "image":"..\/..\/..\/Tile_Editor\/player\/player4.png",
-         "imageheight":16,
-         "imagewidth":48,
-         "margin":0,
-         "name":"player4",
-         "spacing":0,
-         "tilecount":1,
-         "tileheight":16,
-         "tiles":[
-                {
-                 "animation":[
-                        {
-                         "duration":200,
-                         "tileid":1
-                        }, 
-                        {
-                         "duration":200,
-                         "tileid":2
-                        }],
-                 "id":0
-                }],
          "tilewidth":16,
          "transparentcolor":"#000000"
         }],

@@ -51,7 +51,7 @@ export class BaseLevel extends Phaser.Scene {
         }
         this.setPlayerMovement(50);
 
-
+        this.setInteractionArea();
 
 
 
@@ -60,7 +60,7 @@ export class BaseLevel extends Phaser.Scene {
         // this.player.setVelocityX(10);
 
         // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
-        console.log("Coins: " + this.player.coins + "\nHearts: " + this.player.health);
+        // console.log("Coins: " + this.player.coins + "\nHearts: " + this.player.health);
         // console.log(this.player.health);
     }
 
@@ -83,7 +83,7 @@ export class BaseLevel extends Phaser.Scene {
         this.damageLayer = this.map.createLayer("damageLayer", [tsInside, tsOutside, tsAn], 0, 0);
         this.map.createLayer("decorationA", [tsInside, tsOutside, tsAn], 0, 0);
         this.collectablesLayer = this.map.createLayer("collectables", [tsInside, tsOutside, tsAn], 0, 0);
-        
+
 
 
 
@@ -104,22 +104,35 @@ export class BaseLevel extends Phaser.Scene {
     setUpNPCs() {
         this.npcs = this.add.group();
 
-        this.NPC_1 = this.addNPC("NPC_1", 500, 600);
+        this.NPC_1 = this.addNPC("NPC_1", 500, 600, "I Need help finding...");
         this.Knight_1 = this.addNPC("Knight_1", 550, 600);
 
 
 
     }
-    addNPC(name, x, y) {
+    addNPC(name, x, y, message = "Hello there!") {
         let npc = this.physics.add.sprite(x, y, `${name}`)
+        npc.message = message;
         this.npcs.add(npc);
         this.physics.add.collider(this.player, npc, () => {
-            console.log("Player walked over NPC zone");
+            console.log(name);
         });
         npc.setImmovable(true);
         return npc;
     }
 
+    setInteractionArea() {
+        for (let npc of this.npcs.getChildren()) {
+            const dx = this.player.x - npc.x;
+            const dy = this.player.y - npc.y;
+            if (Math.sqrt(dx * dx + dy * dy) < 32) {
+                if (Phaser.Input.Keyboard.JustDown(this.interact)) {
+                    console.log(npc.message);
+                }
+                console.log("Press 'E' to interact");
+            }
+        }
+    }
 
     // Need to add health and collectables
     setUpPlayer() {
@@ -153,12 +166,15 @@ export class BaseLevel extends Phaser.Scene {
         this.cameras.main.setZoom(CAMERA_ZOOM);
     }
 
+
+
     setKeyboards() {
         this.up = this.input.keyboard.addKey("W");
         this.left = this.input.keyboard.addKey("A");
         this.right = this.input.keyboard.addKey("D");
         this.down = this.input.keyboard.addKey("S");
         this.shift = this.input.keyboard.addKey("SHIFT");
+        this.interact = this.input.keyboard.addKey("E");
         // this.jumpKey = this.input.keyboard.addKey("SPACE");
     }
 
