@@ -29,6 +29,7 @@ export class BaseLevel extends Phaser.Scene {
         this.animTimer = 0; // For animated tiles
         this.animFrameDuration = 240; // How fast tiles animates
         this.last_time = 0;
+        this.dialogueActive = false;
 
         this.makeTilemap();
         this.setKeyboards();
@@ -52,7 +53,7 @@ export class BaseLevel extends Phaser.Scene {
         this.setInteractionArea();
 
         // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
-        console.log("Health: " + this.player.health + "\nCoins: " + this.player.coins + "\nHearts: " + this.player.health);
+        //console.log("Health: " + this.player.health + "\nCoins: " + this.player.coins + "\nHearts: " + this.player.health);
         // console.log(this.player.body.velocity.x, this.player.body.velocity.y)
     }
 
@@ -84,15 +85,13 @@ export class BaseLevel extends Phaser.Scene {
 
     setUpNPCs() {
         this.npcs = this.add.group();
-        this.NPC_1 = this.addNPC("NPC_1", 500, 600, "I Need help finding...");
-        this.Knight_1 = this.addNPC("Knight_1", 550, 600);
     }
-    addNPC(name, x, y, message = "Hello there!") {
+    addNPC(name, x, y, message = "...") {
         let npc = this.physics.add.sprite(x, y, `${name}`)
         npc.message = message;
         this.npcs.add(npc);
         this.physics.add.collider(this.player, npc, () => {
-            console.log(name);
+            //console.log(name);
         });
         npc.setImmovable(true);
         return npc;
@@ -104,12 +103,31 @@ export class BaseLevel extends Phaser.Scene {
             const dy = this.player.y - npc.y;
             if (Math.sqrt(dx * dx + dy * dy) < 32) {
                 if (Phaser.Input.Keyboard.JustDown(this.interact)) {
-                    console.log(npc.message);
+                    this.dialogueActive = true;
+
+                    let label = this.add.text(0, 0, npc.message, {
+                        fontFamily: 'Arial',
+                        fontSize: '13px',
+                        color: '#ffffff',
+                        backgroundColor: '#000000'
+                    });
+
+                    label.setPosition(
+                        this.player.x - label.width / 2,
+                        this.player.y + 40
+                    );
+
+                    // remove after 15 seconds
+                    this.time.delayedCall(4000, () => {
+                        label.destroy();
+                        this.dialogueActive = false;
+                    });
                 }
-                console.log("Press 'E' to interact");
+                //console.log("Press 'E' to interact");
             }
         }
     }
+
 
     setUpPlayer() {
         this.player = this.physics.add.sprite(300, 1040, 'player');
@@ -195,6 +213,10 @@ export class BaseLevel extends Phaser.Scene {
     }
 
     setPlayerMovement(PLAYER_SPEED, allowToWalk = true) {
+        if (this.dialogueActive) {
+            this.player.setVelocity(0, 0);
+            return;
+        }
         var speed = PLAYER_SPEED;
         var can = allowToWalk;
         if ((this.down.isDown || this.up.isDown) && (this.left.isDown || this.right.isDown)) {
