@@ -123,7 +123,7 @@ export class BaseLevel extends Phaser.Scene {
                         this.player.y + 40
                     );
 
-                    // remove after 15 seconds
+                    // remove after 4 seconds
                     this.time.delayedCall(4000, () => {
                         label.destroy();
                         this.dialogueActive = false;
