@@ -37,24 +37,6 @@ export class BaseLevel extends Phaser.Scene {
         this.setUpPlayer();
         this.setCamera(3);
         this.setUpNPCs();
-
-        this.keyText = this.add.text(0, 0, "Keys collected: " + this.keysCollected, {
-            fontFamily: 'Arial',
-            fontSize: '9px',
-            color: '#ffffff',
-            backgroundColor: '#000000',
-            padding: { x: 2, y: 2 },
-            align: 'center',
-        });
-
-        // Center on screen
-        this.keyText.setPosition(
-            (this.cameras.main.width / 2 - this.keyText.width / 2)+150,
-            (this.cameras.main.height / 2 - this.keyText.height / 2)-55
-        );
-
-        // Fix it to camera
-        this.keyText.setScrollFactor(0);
     }
 
     update(time, delta) {
