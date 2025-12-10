@@ -29,6 +29,7 @@ export class Level1 extends BaseLevel {
         this.bucketCollected = false;
         this.bucketDelivered = false;
         this.talkedToGirl = false;
+        this.enter = false;
 
         // Mayor
         this.mayor = this.addNPC(
@@ -54,5 +55,15 @@ export class Level1 extends BaseLevel {
 
         this.girl.setImmovable(true);
         this.girlHouse = { x: 120, y: 570 };
+
+        //Guard 
+        this.guard = this.addNPC(
+            "Knight_1",
+            1042,
+            1215,
+            "Halt. You cannot pass."
+        );
+
+        this.guard.setImmovable(true);
     }
 }

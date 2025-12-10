@@ -107,8 +107,15 @@ export class BaseLevel extends Phaser.Scene {
             const dy = this.player.y - npc.y;
             if (Math.sqrt(dx * dx + dy * dy) < 32) {
                 if (Phaser.Input.Keyboard.JustDown(this.interact)) {
+                    //Watergirl interaction condition
                     if (npc === this.girl && !this.talkedToGirl) {
                         this.talkedToGirl = true;
+                    }
+
+                    //Guard interaction condition
+                    if (npc === this.guard && this.keysCollected == 3) {
+                        this.guard.message = "You have collected all three keys.\nYou may enter";
+                        this.enter = true;
                     }
 
                     this.dialogueActive = true;
@@ -135,11 +142,18 @@ export class BaseLevel extends Phaser.Scene {
                     this.time.delayedCall(4000, () => {
                         label.destroy();
                         this.dialogueActive = false;
+                        //Adds watergirl key and gets rid of watergirl NPC
                         if(this.bucketDelivered)
                         {
                             this.keysCollected++;
                             this.keyText.setText("Keys collected: " + this.keysCollected);
                             this.girl.destroy();
+                        }
+
+                        //Checks if enter is true
+                        if(this.enter)
+                        {
+                            this.scene.start('Level2');
                         }
                     });
                 }
