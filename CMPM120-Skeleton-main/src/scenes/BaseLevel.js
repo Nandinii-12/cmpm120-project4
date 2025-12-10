@@ -88,16 +88,8 @@ export class BaseLevel extends Phaser.Scene {
         this.npcs = this.add.group();
         this.knights = this.add.group();
 
-        // this.physics.world.overlap(this.player, this.knights, (p, e) => {
-        //     p.health--;
-        // });
-        this.physics.world.overlap(this.attackHitbox, this.knights, (p, e) => {
-            e.health--;
-        });
-
-        // this.physics.add.collider(this.player, this.knights, (p, t) => this.damageKnight(p, t, this.time.now), null, this);
-        // this.physics.add.collider(this.player, this.knights, (p, t) => this.damagePlayer(p, t, this.time.now), null, this);
         this.physics.add.collider(this.player, this.knights, (player, knight) => { this.damagePlayer(player, knight, this.time.now); this.damageKnight(player, knight, this.time.now); }, null, this);
+        this.physics.add.collider(this.attackHitbox, this.knights, (player, knight) => { this.damageKnight(player, knight, this.time.now); }, null, this);
 
     }
 
@@ -260,7 +252,8 @@ export class BaseLevel extends Phaser.Scene {
         this.player.canMove = true;
         this.player.lastDir = new Phaser.Math.Vector2(1, 0); // default facing right
         this.player.setSize(10, 10);
-        this.attackHitbox = this.physics.add.image(0, 0, 'attackLine1');
+        this.attackHitbox = this.physics.add.sprite(0, 0, 'attackLine1');
+        this.attackHitbox.setTint(0xDCFBFF);
         this.attackHitbox.setDisplaySize(16, 24);
         this.attackHitbox.setVisible(false);
         this.attackHitbox.setActive(false);
@@ -308,17 +301,14 @@ export class BaseLevel extends Phaser.Scene {
 
     damagePlayer(player, knight, time) {
 
-        if (time < player.lastDamageTime + player.damageCoolDown) {
+        if (!player.canMove) {
             return;
         }
-
-        if (!knight.canMove) {
-            return;
-        }
+        player.canMove = false;
         player.lastDamageTime = time;
 
         // Knockback strength
-        const bounce = 200;
+        const bounce = 40;
 
         // Bounce AWAY from the knight
         const dx = player.x - knight.x;
@@ -338,10 +328,24 @@ export class BaseLevel extends Phaser.Scene {
         // Flash effect
         player.setTint(0xff5555);
         this.time.delayedCall(150, () => player.clearTint());
+
+        this.time.delayedCall(300, () => {
+            player.body.setVelocity(0, 0);
+        });
+
+        this.time.delayedCall(400, () => {
+            player.canMove = true;
+        });
     }
 
 
     damageKnight(player, knight, time) {
+
+        if (knight.health <= 0) {
+            knight.destroy();
+            return;
+        }
+        console.log(knight.health);
 
         if (!knight.canMove) {
             return;
@@ -372,6 +376,10 @@ export class BaseLevel extends Phaser.Scene {
         this.time.delayedCall(150, () => knight.clearTint());
 
         this.time.delayedCall(500, () => {
+            if (knight.health <= 0) {
+                knight.destroy();
+                return;
+            }
             knight.body.setVelocity(0, 0);
         });
 
@@ -598,7 +606,7 @@ export class BaseLevel extends Phaser.Scene {
 
         // Activate hitbox
         this.attackHitbox.setVisible(true);
-        this.attackHitbox.setActive(true);
+        this.attackHitbox.body.enable = true;
 
         this.time.delayedCall(50, () => {
             this.attackHitbox.setTexture('attackLine2');
@@ -611,12 +619,13 @@ export class BaseLevel extends Phaser.Scene {
         // Hide after 200ms
         this.time.delayedCall(200, () => {
             this.attackHitbox.setVisible(false);
-            this.attackHitbox.setActive(false);
+            this.attackHitbox.body.enable = false;
+            console.log("Disable");
         });
     }
 
     collectMushroom(player, mush) {
-        if (!this.startedMushroomQuest) return; 
+        if (!this.startedMushroomQuest) return;
 
         mush.destroy();
         this.mushroomsCollected++;
