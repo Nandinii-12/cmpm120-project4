@@ -189,6 +189,11 @@ export class BaseLevel extends Phaser.Scene {
                         this.inLibrary = true;
                     }
 
+                    //Rich girl interaction condition
+                    if (npc === this.richGirl && !this.talkRich) {
+                        this.talkRich = true;
+                    }
+
                     this.dialogueActive = true;
 
                     let label = this.add.text(0, 0, npc.message, {
@@ -575,6 +580,15 @@ export class BaseLevel extends Phaser.Scene {
             }
             return false;
         }
+
+        if(tile.properties.mush === true) {
+            if(!this.talkRich)
+            {
+                return false;
+            }
+            this.mushCount++;
+            this.collectablesLayer.removeTileAt(tile.x, tile.y);
+        }
     }
 
     attacking() {
@@ -623,6 +637,7 @@ export class BaseLevel extends Phaser.Scene {
             console.log("Disable");
         });
     }
+<<<<<<< HEAD
 
     collectMushroom(player, mush) {
         if (!this.startedMushroomQuest) return;
@@ -645,4 +660,6 @@ export class BaseLevel extends Phaser.Scene {
             this.helpedMushroomNPC = true;
         }
     }
+=======
+>>>>>>> 991c7a9c8612c3ff4f89251a38689582ae379515
 }
