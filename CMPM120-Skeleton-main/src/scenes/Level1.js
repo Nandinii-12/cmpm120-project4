@@ -8,34 +8,6 @@ export class Level1 extends BaseLevel {
     create() {
         super.create();
 
-        // --- Create mushrooms from object layer ---
-        this.mushrooms = this.physics.add.group();
-
-        // Get the Tiled object layer named "mushrooms"
-        const objects = this.map.getObjectLayer("mushrooms").objects;
-
-        objects.forEach(obj => {
-            // Find the property named "mushroom" that is true
-            let isMushroom = false;
-
-            if (obj.properties) {
-                obj.properties.forEach(p => {
-                    if (p.name === "mushroom" && p.value === true) {
-                        isMushroom = true;
-                    }
-                });
-            }
-
-            if (isMushroom) {
-                // obj.gid uses the tile image from Tiled
-                let mush = this.mushrooms.create(obj.x, obj.y - obj.height, obj.gid);
-                mush.setOrigin(0, 1);
-                mush.isMushroom = true;
-            }
-        });
-
-        this.physics.add.overlap(this.player, this.mushrooms, this.collectMushroom, null, this);
-
         if (this.registry.get("spawnAtLibraryExit"))
         {
             this.player.setPosition(this.libraryExit.x, this.libraryExit.y);
@@ -66,6 +38,7 @@ export class Level1 extends BaseLevel {
         this.enter = false;
         this.inLibrary = false;
         this.gotKey = false;
+        this.mushCount = 0;
 
         // Mayor
         this.mayor = this.addNPC(
