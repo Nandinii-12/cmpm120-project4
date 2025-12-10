@@ -86,13 +86,18 @@ export class BaseLevel extends Phaser.Scene {
         this.npcs = this.add.group();
         this.NPC_1 = this.addNPC("NPC_1", 500, 600, "I Need help finding...");
         this.Knight_1 = this.addNPC("Knight_1", 550, 600);
+        this.princess = this.addNPC("NPC_2", 450, 600, "I need water");
     }
-    addNPC(name, x, y, message = "Hello there!") {
-        let npc = this.physics.add.sprite(x, y, `${name}`)
+
+    addNPC(name, x, y, message = "Hello there!", message2 = "...") {
+        let npc = this.physics.add.sprite(x, y, `${name}`);
+        // message
         npc.message = message;
+        npc.message2 = message2;
+        
         this.npcs.add(npc);
         this.physics.add.collider(this.player, npc, () => {
-            console.log(name);
+            // console.log(name);
         });
         npc.setImmovable(true);
         return npc;
@@ -104,6 +109,7 @@ export class BaseLevel extends Phaser.Scene {
             const dy = this.player.y - npc.y;
             if (Math.sqrt(dx * dx + dy * dy) < 32) {
                 if (Phaser.Input.Keyboard.JustDown(this.interact)) {
+                    // interact
                     console.log(npc.message);
                 }
                 console.log("Press 'E' to interact");
@@ -114,6 +120,7 @@ export class BaseLevel extends Phaser.Scene {
     setUpPlayer() {
         this.player = this.physics.add.sprite(300, 1040, 'player');
         this.player.lastDir = new Phaser.Math.Vector2(1, 0); // default facing right
+        this.player.setSize(10, 10);
         this.attackHitbox = this.physics.add.image(0, 0, 'attackLine1');
         this.attackHitbox.setDisplaySize(16, 24);
         this.attackHitbox.setVisible(false);
@@ -123,7 +130,7 @@ export class BaseLevel extends Phaser.Scene {
         this.damageCoolDown = 500;
         this.isAttacking = false;
 
-        this.player.setSize(10, 10);
+        
         // this.player.setOffset(0, 0);
 
         this.player.key = false;
