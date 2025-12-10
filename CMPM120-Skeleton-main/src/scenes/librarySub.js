@@ -36,7 +36,6 @@ export class librarySub extends BaseLevel {
             "Here is the third key."
         );
         this.gotKey = true;
-
         this.librarian.setImmovable(true);
     }
 }

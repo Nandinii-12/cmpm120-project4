@@ -30,7 +30,7 @@ export class BaseLevel extends Phaser.Scene {
         this.animFrameDuration = 240; // How fast tiles animates
         this.last_time = 0;
         this.dialogueActive = false;
-        this.keysCollected = 0;
+        this.keysCollected = this.registry.get("keysCollected") ?? 0;
 
         this.makeTilemap();
         this.setKeyboards();
@@ -119,7 +119,7 @@ export class BaseLevel extends Phaser.Scene {
                     }
 
                     //Librarian interaction condition 1
-                    if (npc === this.librarian && this.keysCollected == 1) {
+                    if (npc === this.librarian && this.keysCollected == 2) {
                         this.librarian.message = "I see you have two keys collected.\nCome inside the library, I have something for you.";
                         this.inLibrary = true;
                     }
@@ -152,6 +152,7 @@ export class BaseLevel extends Phaser.Scene {
                         if(this.bucketDelivered)
                         {
                             this.keysCollected++;
+                            this.registry.set("keysCollected", this.keysCollected);
                             this.keyText.setText("Keys collected: " + this.keysCollected);
                             this.girl.destroy();
                         }
@@ -172,7 +173,10 @@ export class BaseLevel extends Phaser.Scene {
                         if(this.gotKey)
                         {
                             this.keysCollected++;
+                            this.registry.set("keysCollected", this.keysCollected);
                             this.keyText.setText("Keys collected: " + this.keysCollected);
+
+                            this.registry.set("spawnAtLibraryExit", true);
                             this.scene.start('Level1');
                         }
                     });
