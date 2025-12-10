@@ -504,7 +504,7 @@ export class BaseLevel extends Phaser.Scene {
     }
 
     collectMushroom(player, mush) {
-        if (!this.startedMushroomQuest) return;
+        if (!this.startedMushroomQuest) return; 
 
         mush.destroy();
         this.mushroomsCollected++;
