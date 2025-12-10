@@ -39,6 +39,7 @@ export class Level1 extends BaseLevel {
         this.inLibrary = false;
         this.gotKey = false;
         this.mushCount = 0;
+        this.talkRich = false;
 
         // Mayor
         this.mayor = this.addNPC(
@@ -85,5 +86,15 @@ export class Level1 extends BaseLevel {
 
         this.librarian.setImmovable(true);
         this.libraryExit = { x: 1030, y: 330 };
+
+        //Rich girl 
+        this.richGirl = this.addNPC(
+            "NPC_2",
+            320,
+            240,
+            "Please help me find my gold coins!\nI lost 25 of them!"
+        );
+
+        this.richGirl.setImmovable(true);
     }
 }

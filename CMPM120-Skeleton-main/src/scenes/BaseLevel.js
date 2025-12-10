@@ -197,6 +197,11 @@ export class BaseLevel extends Phaser.Scene {
                         this.inLibrary = true;
                     }
 
+                    //Rich girl interaction condition
+                    if (npc === this.richGirl && !this.talkRich) {
+                        this.talkRich = true;
+                    }
+
                     this.dialogueActive = true;
 
                     let label = this.add.text(0, 0, npc.message, {
@@ -569,6 +574,10 @@ export class BaseLevel extends Phaser.Scene {
         }
 
         if(tile.properties.mush === true) {
+            if(!this.talkRich)
+            {
+                return false;
+            }
             this.mushCount++;
             this.collectablesLayer.removeTileAt(tile.x, tile.y);
         }
