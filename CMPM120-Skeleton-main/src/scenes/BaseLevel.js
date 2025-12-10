@@ -134,6 +134,10 @@ export class BaseLevel extends Phaser.Scene {
                     this.time.delayedCall(4000, () => {
                         label.destroy();
                         this.dialogueActive = false;
+                        if(this.bucketDelivered)
+                        {
+                            this.girl.destroy();
+                        }
                     });
                 }
             }
@@ -402,8 +406,12 @@ export class BaseLevel extends Phaser.Scene {
             this.collectablesLayer.removeTileAt(tile.x, tile.y);
 
             // Move the girl to the house
-            this.girl.setPosition(120, 570);
-            this.girl.message = "Thank you! Here is a key I found for your troubles.\nIt looks valuable.";
+            if(!this.bucketDelivered)
+            {
+                this.girl.setPosition(120, 570);
+                this.girl.message = "Thank you! Here is a key I found for your troubles.\nIt looks valuable.";
+                this.bucketDelivered = true;
+            }
             return false;
         }
     }
