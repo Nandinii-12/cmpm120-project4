@@ -97,7 +97,7 @@ export class BaseLevel extends Phaser.Scene {
         
         this.npcs.add(npc);
         this.physics.add.collider(this.player, npc, () => {
-            //console.log(name);
+            console.log(name);
         });
         npc.setImmovable(true);
         return npc;
@@ -109,7 +109,25 @@ export class BaseLevel extends Phaser.Scene {
             const dy = this.player.y - npc.y;
             if (Math.sqrt(dx * dx + dy * dy) < 32) {
                 if (Phaser.Input.Keyboard.JustDown(this.interact)) {
-                    console.log(npc.message);
+                    //console.log(npc.message);
+                    this.dialogueActive = true;
+                    let label = this.add.text(0, 0, npc.message, {
+                        fontFamily: 'Arial',
+                        fontSize: '13px',
+                        color: '#ffffff',
+                        backgroundColor: '#000000'
+                    });
+
+                    label.setPosition(
+                        this.player.x - label.width / 2,
+                        this.player.y + 40
+                    );
+
+                    // remove after 15 seconds
+                    this.time.delayedCall(4000, () => {
+                        label.destroy();
+                        this.dialogueActive = false;
+                    });
                 }
                 //console.log("Press 'E' to interact");
             }
