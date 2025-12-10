@@ -85,15 +85,12 @@ export class BaseLevel extends Phaser.Scene {
 
     setUpNPCs() {
         this.npcs = this.add.group();
-        this.NPC_1 = this.addNPC("NPC_1", 500, 600, "I Need help finding...");
-        this.Knight_1 = this.addNPC("Knight_1", 550, 600);
     }
 
-    addNPC(name, x, y, message = "Hello there!", message2 = "...") {
+    addNPC(name, x, y, message = "...") {
         let npc = this.physics.add.sprite(x, y, `${name}`);
         // message
         npc.message = message;
-        npc.message2 = message2;
         
         this.npcs.add(npc);
         this.physics.add.collider(this.player, npc, () => {
@@ -109,27 +106,36 @@ export class BaseLevel extends Phaser.Scene {
             const dy = this.player.y - npc.y;
             if (Math.sqrt(dx * dx + dy * dy) < 32) {
                 if (Phaser.Input.Keyboard.JustDown(this.interact)) {
-                    //console.log(npc.message);
+                    if (npc === this.girl && !this.talkedToGirl) {
+                        this.talkedToGirl = true;
+                    }
+
                     this.dialogueActive = true;
+
                     let label = this.add.text(0, 0, npc.message, {
                         fontFamily: 'Arial',
-                        fontSize: '13px',
+                        fontSize: '12px',
                         color: '#ffffff',
-                        backgroundColor: '#000000'
+                        backgroundColor: '#000000',
+                        padding: { x: 10, y: 6 },
+                        align: 'center',
                     });
 
+                    // Center on screen
                     label.setPosition(
-                        this.player.x - label.width / 2,
-                        this.player.y + 40
+                        (this.cameras.main.width / 2 - label.width / 2),
+                        (this.cameras.main.height / 2 - label.height / 2)+60
                     );
 
-                    // remove after 4 seconds
+                    // Fix it to camera
+                    label.setScrollFactor(0);
+
+                    // Remove after 4 seconds
                     this.time.delayedCall(4000, () => {
                         label.destroy();
                         this.dialogueActive = false;
                     });
                 }
-                //console.log("Press 'E' to interact");
             }
         }
     }
@@ -384,6 +390,20 @@ export class BaseLevel extends Phaser.Scene {
             // this.registry.set(REG_coin, this.coin);
 
             this.collectablesLayer.removeTileAt(tile.x, tile.y);
+            return false;
+        }
+
+        if (tile.properties.bucket === true) {
+            if (!this.talkedToGirl) {
+                return false;
+            }
+
+            this.bucketCollected = true;
+            this.collectablesLayer.removeTileAt(tile.x, tile.y);
+
+            // Move the girl to the house
+            this.girl.setPosition(120, 570);
+            this.girl.message = "Thank you! Here is a key I found for your troubles.\nIt looks valuable.";
             return false;
         }
     }

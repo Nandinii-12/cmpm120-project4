@@ -1503,6 +1503,16 @@
          "spacing":1,
          "tilecount":132,
          "tileheight":16,
+         "tiles":[
+                {
+                 "id":131,
+                 "properties":[
+                        {
+                         "name":"bucket",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }],
          "tilewidth":16,
          "transparentcolor":"#000000"
         }, 

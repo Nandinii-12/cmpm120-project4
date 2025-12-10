@@ -8,6 +8,10 @@ export class Level1 extends BaseLevel {
     create() {
         super.create();
 
+        this.bucketCollected = false;
+        this.bucketDelivered = false;
+        this.talkedToGirl = false;
+
         // Mayor
         this.mayor = this.addNPC(
             "NPC_4",
@@ -21,16 +25,16 @@ export class Level1 extends BaseLevel {
 
         this.mayor.setImmovable(true);
     
-
-    // Water girl 
+        // Water girl 
         this.girl = this.addNPC(
             "NPC_1",
             800,
             870,
-
-            "Please help me carry this bucket to my house.\nI live in the small brown house WEST of here."
+            "Please help me carry this bucket to my house." + 
+            "\nI live in the small brown house WEST of here.\nI will meet you there."
         );
 
         this.girl.setImmovable(true);
+        this.girlHouse = { x: 120, y: 570 };
     }
 }
