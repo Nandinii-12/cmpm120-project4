@@ -114,8 +114,20 @@ export class BaseLevel extends Phaser.Scene {
 
                     //Guard interaction condition
                     if (npc === this.guard && this.keysCollected == 3) {
-                        this.guard.message = "You have collected all three keys.\nYou may enter";
+                        this.guard.message = "You have collected all three keys.\nYou may enter.";
                         this.enter = true;
+                    }
+
+                    //Librarian interaction condition 2
+                    if (npc === this.librarian && this.inLibrary) {
+                        this.librarian.message = "Here is the third key.";
+                        this.gotKey = true;
+                    }
+
+                    //Librarian interaction condition 1
+                    if (npc === this.librarian && this.keysCollected == 2) {
+                        this.librarian.message = "I see you have two keys collected.\nCome inside the library, I have something for you.";
+                        this.inLibrary = true;
                     }
 
                     this.dialogueActive = true;
@@ -154,6 +166,18 @@ export class BaseLevel extends Phaser.Scene {
                         if(this.enter)
                         {
                             this.scene.start('Level2');
+                        }
+
+                        //Checks if inLibrary is true
+                        if(this.inLibrary)
+                        {
+                            this.scene.start('librarySub');
+                        }
+
+                        //Checks if gotKey is true
+                        if(this.gotKey)
+                        {
+                            this.scene.start('Level1');
                         }
                     });
                 }
