@@ -502,4 +502,26 @@ export class BaseLevel extends Phaser.Scene {
             this.attackHitbox.setActive(false);
         });
     }
+
+    collectMushroom(player, mush) {
+        if (!this.startedMushroomQuest) return;
+
+        mush.destroy();
+        this.mushroomsCollected++;
+
+        // Optional XP-style popup
+        let popup = this.add.text(player.x, player.y - 20, "+1 mushroom", {
+            fontSize: "12px",
+            color: "#00ff00",
+            stroke: "#000",
+            strokeThickness: 4
+        });
+        popup.setDepth(999);
+
+        this.time.delayedCall(800, () => popup.destroy());
+
+        if (this.mushroomsCollected >= this.mushroomsNeeded) {
+            this.helpedMushroomNPC = true;
+        }
+    }
 }
