@@ -50,7 +50,7 @@ export class BaseLevel extends Phaser.Scene {
         } else {
             this.setPlayerMovement(50);
         }
-        this.setPlayerMovement(50);
+        this.setPlayerMovement(500);
         this.setInteractionArea();
 
         // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
@@ -86,13 +86,26 @@ export class BaseLevel extends Phaser.Scene {
 
     setUpNPCs() {
         this.npcs = this.add.group();
+        this.knights = this.add.group();
+
+        // this.physics.world.overlap(this.player, this.knights, (p, e) => {
+        //     p.health--;
+        // });
+        this.physics.world.overlap(this.attackHitbox, this.knights, (p, e) => {
+            e.health--;
+        });
+
+        // this.physics.add.collider(this.player, this.knights, (p, t) => this.damageKnight(p, t, this.time.now), null, this);
+        // this.physics.add.collider(this.player, this.knights, (p, t) => this.damagePlayer(p, t, this.time.now), null, this);
+        this.physics.add.collider(this.player, this.knights, (player, knight) => { this.damagePlayer(player, knight, this.time.now); this.damageKnight(player, knight, this.time.now); }, null, this);
+
     }
 
     addNPC(name, x, y, message = "...") {
         let npc = this.physics.add.sprite(x, y, `${name}`);
         // message
         npc.message = message;
-        
+
         this.npcs.add(npc);
         this.physics.add.collider(this.player, npc, () => {
             console.log(name);
@@ -100,6 +113,66 @@ export class BaseLevel extends Phaser.Scene {
         npc.setImmovable(true);
         return npc;
     }
+
+    addKnight(name, x, y) {
+        let knight = this.physics.add.sprite(x, y, `${name}`);
+        knight.health = 5;
+        knight.lastDamageTime = 0;
+        knight.damageCoolDown = 500;
+        knight.canMove = true;
+        this.physics.add.collider(knight, this.obstaclesLayer);
+
+        // message
+        // knight.message = message;
+
+        this.knights.add(knight);
+
+
+        knight.setImmovable(true);
+        knight.xorigin = x;
+        knight.yorigin = y;
+        return knight;
+    }
+
+    setKnightAttackArea(speed = 40, area = 112) {
+
+        for (let knight of this.knights.getChildren()) {
+            if (knight.canMove === true) {
+                // Distance from player to knight's ORIGIN
+                const dx = this.player.x - knight.xorigin;
+                const dy = this.player.y - knight.yorigin;
+                const distanceToOrigin = Math.hypot(dx, dy);
+
+                if (distanceToOrigin < area) {
+                    // ---- CHASE PLAYER ----
+                    const cx = this.player.x - knight.x;
+                    const cy = this.player.y - knight.y;
+                    const cdist = Math.hypot(cx, cy);
+
+                    const nx = cx / cdist;
+                    const ny = cy / cdist;
+
+                    knight.body.setVelocity(nx * speed, ny * speed);
+                }
+                else {
+                    // ---- RETURN TO ORIGIN ----
+                    const rx = knight.xorigin - knight.x;
+                    const ry = knight.yorigin - knight.y;
+                    const rdist = Math.hypot(rx, ry);
+
+                    if (rdist > 2) {
+                        const nx = rx / rdist;
+                        const ny = ry / rdist;
+                        knight.body.setVelocity(nx * speed, ny * speed);
+                    } else {
+                        knight.body.setVelocity(0, 0);
+                    }
+                }
+            }
+
+        }
+    }
+
 
     setInteractionArea() {
         for (let npc of this.npcs.getChildren()) {
@@ -138,7 +211,7 @@ export class BaseLevel extends Phaser.Scene {
                     // Center on screen
                     label.setPosition(
                         (this.cameras.main.width / 2 - label.width / 2),
-                        (this.cameras.main.height / 2 - label.height / 2)+60
+                        (this.cameras.main.height / 2 - label.height / 2) + 60
                     );
 
                     // Fix it to camera
@@ -149,8 +222,7 @@ export class BaseLevel extends Phaser.Scene {
                         label.destroy();
                         this.dialogueActive = false;
                         //Adds watergirl key and gets rid of watergirl NPC
-                        if(this.bucketDelivered)
-                        {
+                        if (this.bucketDelivered) {
                             this.keysCollected++;
                             this.registry.set("keysCollected", this.keysCollected);
                             this.keyText.setText("Keys collected: " + this.keysCollected);
@@ -158,20 +230,17 @@ export class BaseLevel extends Phaser.Scene {
                         }
 
                         //Checks if enter is true
-                        if(this.enter)
-                        {
+                        if (this.enter) {
                             this.scene.start('Level2');
                         }
 
                         //Checks if inLibrary is true
-                        if(this.inLibrary)
-                        {
+                        if (this.inLibrary) {
                             this.scene.start('librarySub');
                         }
 
                         //Checks if gotKey is true
-                        if(this.gotKey)
-                        {
+                        if (this.gotKey) {
                             this.keysCollected++;
                             this.registry.set("keysCollected", this.keysCollected);
                             this.keyText.setText("Keys collected: " + this.keysCollected);
@@ -188,6 +257,7 @@ export class BaseLevel extends Phaser.Scene {
 
     setUpPlayer() {
         this.player = this.physics.add.sprite(300, 1040, 'player');
+        this.player.canMove = true;
         this.player.lastDir = new Phaser.Math.Vector2(1, 0); // default facing right
         this.player.setSize(10, 10);
         this.attackHitbox = this.physics.add.image(0, 0, 'attackLine1');
@@ -199,7 +269,7 @@ export class BaseLevel extends Phaser.Scene {
         this.damageCoolDown = 500;
         this.isAttacking = false;
 
-        
+
         // this.player.setOffset(0, 0);
 
         this.player.key = false;
@@ -236,47 +306,90 @@ export class BaseLevel extends Phaser.Scene {
         this.attack = this.input.keyboard.addKey("SPACE");
     }
 
-    damagePlayer(player, tile, time) {
+    damagePlayer(player, knight, time) {
 
-        if (time < this.lastDamageTime + this.damageCoolDown) {
+        if (time < player.lastDamageTime + player.damageCoolDown) {
             return;
         }
-        this.lastDamageTime = time;
 
-        // Bounce 
-        var bounce = 20;
-        if (this.up.isDown) {
-            this.player.setVelocityY(bounce);
-        } else if (this.down.isDown) {
-            this.player.setVelocityY(-bounce);
+        if (!knight.canMove) {
+            return;
+        }
+        player.lastDamageTime = time;
+
+        // Knockback strength
+        const bounce = 200;
+
+        // Bounce AWAY from the knight
+        const dx = player.x - knight.x;
+        const dy = player.y - knight.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist > 0) {
+            const nx = dx / dist;
+            const ny = dy / dist;
+
+            player.body.setVelocity(nx * bounce, ny * bounce);
         }
 
-        if (this.left.isDown) {
-            this.player.setVelocityX(bounce);
-        }
-        else if (this.right.isDown) {
-            this.player.setVelocityX(-bounce);
-        }
-
-        // Take 1 damage (but not below 0)
+        // Deal 1 damage
         player.health = Math.max(0, player.health - 1);
 
-        // flash effect
+        // Flash effect
         player.setTint(0xff5555);
         this.time.delayedCall(150, () => player.clearTint());
-
-        // this.sound.play('hit');
-
-        // if (player.health <= 0) { this.scene.start("GameOver"); }
     }
 
-    setPlayerMovement(PLAYER_SPEED, allowToWalk = true) {
+
+    damageKnight(player, knight, time) {
+
+        if (!knight.canMove) {
+            return;
+        }
+
+        knight.canMove = false; // stun immediately
+        knight.lastDamageTime = time;
+
+        // Knockback strength
+        const bounce = 40;
+
+        // Bounce away from player
+        const dx = knight.x - player.x;
+        const dy = knight.y - player.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist > 0) {
+            const nx = dx / dist;
+            const ny = dy / dist;
+            knight.body.setVelocity(nx * bounce, ny * bounce);
+        }
+
+        // Deal 1 damage
+        knight.health = Math.max(0, knight.health - 1);
+
+        // Flash hit effect
+        knight.setTint(0xff5555);
+        this.time.delayedCall(150, () => knight.clearTint());
+
+        this.time.delayedCall(500, () => {
+            knight.body.setVelocity(0, 0);
+        });
+
+        this.time.delayedCall(600, () => {
+            knight.canMove = true;
+        });
+    }
+
+
+
+
+    setPlayerMovement(PLAYER_SPEED) {
         if (this.dialogueActive) {
             this.player.setVelocity(0, 0);
             return;
         }
         var speed = PLAYER_SPEED;
-        var can = allowToWalk;
+
         if ((this.down.isDown || this.up.isDown) && (this.left.isDown || this.right.isDown)) {
             speed = PLAYER_SPEED / Math.sqrt(2);
         } else {
@@ -289,7 +402,7 @@ export class BaseLevel extends Phaser.Scene {
             speed = speed;
         }
 
-        if (can === true) {
+        if (this.player.canMove === true) {
             if (this.up.isDown) {
                 this.player.setVelocityY(-speed);
             }
@@ -447,8 +560,7 @@ export class BaseLevel extends Phaser.Scene {
             this.collectablesLayer.removeTileAt(tile.x, tile.y);
 
             // Move the girl to the house
-            if(!this.bucketDelivered)
-            {
+            if (!this.bucketDelivered) {
                 this.girl.setPosition(120, 570);
                 this.girl.message = "Thank you! Here is a key I found for your troubles.\nIt looks valuable.";
                 this.bucketDelivered = true;
