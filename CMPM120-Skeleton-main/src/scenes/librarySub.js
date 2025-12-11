@@ -8,6 +8,8 @@ export class librarySub extends BaseLevel {
     create() {
         super.create();
 
+        this.librarianGivesKey = false;
+
         this.keyText = this.add.text(0, 0, "Keys collected: " + this.keysCollected, {
             fontFamily: 'Arial',
             fontSize: '9px',
