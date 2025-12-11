@@ -34,8 +34,8 @@ export class librarySub extends BaseLevel {
 
         this.librarian = this.addNPC(
             "NPC_3",
-            250,
-            50,
+            290,
+            70,
             "Here is the third key."
         );
         this.gotKey = true;

@@ -30,7 +30,7 @@ export class BaseLevel extends Phaser.Scene {
         this.animFrameDuration = 240; // How fast tiles animates
         this.last_time = 0;
         this.dialogueActive = false;
-        this.keysCollected = this.registry.get("keysCollected") ?? 2;
+        this.keysCollected = this.registry.get("keysCollected") ?? 0;
 
         this.makeTilemap();
         this.setKeyboards();
@@ -233,7 +233,6 @@ export class BaseLevel extends Phaser.Scene {
 
                 //SHOW DIALOGUE TEXT
                 this.dialogueActive = true;
-
                 let label = this.add.text(0, 0, npc.message, {
                     fontFamily: 'Arial',
                     fontSize: '12px',
@@ -246,7 +245,7 @@ export class BaseLevel extends Phaser.Scene {
                 // Center on screen
                 label.setPosition(
                     (this.cameras.main.width / 2 - label.width / 2),
-                    (this.cameras.main.height / 2 - label.height / 2) + 100
+                    (this.cameras.main.height / 2 - label.height / 2) + 50
                 );
 
                 // Keep fixed to camera
