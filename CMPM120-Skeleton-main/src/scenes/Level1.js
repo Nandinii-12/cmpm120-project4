@@ -32,13 +32,30 @@ export class Level1 extends BaseLevel {
         // Fix it to camera
         this.keyText.setScrollFactor(0);
 
+        this.coinText = this.add.text(0, 0, "Coins: " + this.player.coins + "/ 25", {
+                fontFamily: 'Arial',
+                fontSize: '9px',
+                color: "#ffffff",
+                backgroundColor: '#000000',
+                padding: { x: 2, y: 2 },
+                align: 'center',
+            }
+        );
+
+        this.coinText.setPosition(
+            (this.cameras.main.width / 2 - this.keyText.width / 2)+150,
+            (this.cameras.main.height / 2 - this.keyText.height / 2)
+        );
+
+        this.coinText.setScrollFactor(0); 
+        this.coinText.setVisible(false);
+
         this.bucketCollected = false;
         this.bucketDelivered = false;
         this.talkedToGirl = false;
         this.enter = false;
         this.inLibrary = false;
         this.gotKey = false;
-        this.mushCount = 0;
         this.talkRich = false;
 
         // Mayor

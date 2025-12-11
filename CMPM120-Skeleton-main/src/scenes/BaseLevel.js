@@ -546,7 +546,13 @@ export class BaseLevel extends Phaser.Scene {
         if (!tile.properties) return false;
         // check if tile has a property 'Coins'equal to true
         if (tile.properties.Coins === true) {
-            player.coins++;
+            if(!this.talkRich)
+            {
+                return false;
+            }
+            this.coinText.setVisible(true);
+            this.player.coins++;
+            this.coinText.setText("Coins: " + this.player.coins + " / 25");
 
             // this.sound.play('coin'); 
             // this.coinText.setText('coin: ' + this.coin);
@@ -571,15 +577,6 @@ export class BaseLevel extends Phaser.Scene {
                 this.bucketDelivered = true;
             }
             return false;
-        }
-
-        if(tile.properties.mush === true) {
-            if(!this.talkRich)
-            {
-                return false;
-            }
-            this.mushCount++;
-            this.collectablesLayer.removeTileAt(tile.x, tile.y);
         }
     }
 
