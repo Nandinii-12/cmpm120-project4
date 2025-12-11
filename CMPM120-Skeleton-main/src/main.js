@@ -1,6 +1,6 @@
 import { Level1 } from "./scenes/Level1.js";
 import { Level2 } from "./scenes/Level2.js";
-import { librarySub } from "./scenes/library.js";
+import { librarySub } from "./scenes/librarySub.js";
 import { Level1Dupe } from "./scenes/Level1Dupe.js";
 import { Start } from "./scenes/Start.js";
 import { Win } from "./scenes/Win.js";
