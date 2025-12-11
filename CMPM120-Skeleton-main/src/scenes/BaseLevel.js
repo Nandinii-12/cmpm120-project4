@@ -330,7 +330,11 @@ export class BaseLevel extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.startFollow(this.player, true);
         this.cameras.main.setDeadzone(100, 50);
+
+        
         this.cameras.main.setZoom(CAMERA_ZOOM);
+        
+        
     }
 
     setKeyboards() {
