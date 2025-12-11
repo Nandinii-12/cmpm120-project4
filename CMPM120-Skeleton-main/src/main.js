@@ -7,7 +7,7 @@ import { Start } from "./scenes/Start.js";
 const config = {
     type: Phaser.AUTO,
     title: 'CMPM 120 Project 4',
-    description: '',
+    description: ' ',
     parent: 'game-container',
     width: 1280,
     height: 720,
