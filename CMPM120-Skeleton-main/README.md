@@ -37,11 +37,19 @@
         - Made displays for player health and kills in lvl 2
     
     - Worapas: 
-        - Player movement
+        - Player movement (W, A, S, D, Sprint, Attack)
         - Keyboard interactions
         - Designed half of level 2
         - Designed sprite animation
         - Designed NPCs 
+        - NPCs system and interactions
+        - Collection system
+        - Attacking system (slash, bounce, enemy attack/chase area)
+        - Tile Animation
+        - Player Animation
+        - Camera
+        - Tilemap assets and layers
+
     # WRITE YOUR CONTRIBUTIONS HERE
 
 # Personal Rubric Grading (10 pts):

@@ -90,7 +90,14 @@ export class BaseLevel extends Phaser.Scene {
         this.knights = this.add.group();
 
         this.physics.add.collider(this.player, this.knights, (player, knight) => { this.damagePlayer(player, knight, this.time.now); this.damageKnight(player, knight, this.time.now); }, null, this);
-        this.physics.add.collider(this.attackHitbox, this.knights, (player, knight) => { this.damageKnight(player, knight, this.time.now); }, null, this);
+        this.physics.add.overlap(
+            this.attackHitbox,
+            this.knights,
+            (hitbox, knight) => this.damageKnight(this.player, knight, this.time.now),
+            null,
+            this
+        );
+
 
     }
 
@@ -586,8 +593,7 @@ export class BaseLevel extends Phaser.Scene {
         if (!tile.properties) return false;
         // check if tile has a property 'Coins'equal to true
         if (tile.properties.Coins === true) {
-            if(!this.talkRich)
-            {
+            if (!this.talkRich) {
                 return false;
             }
             this.coinText.setVisible(true);
@@ -621,48 +627,39 @@ export class BaseLevel extends Phaser.Scene {
     }
 
     attacking() {
-        let dir = this.player.lastDir.clone().normalize();
+        const dir = this.player.lastDir.clone().normalize();
+        const distance = 16;          // Distance in front of player
+        const w = 52, h = 70;         // Base hitbox size
+
+        // Choose initial attack frame
         this.attackHitbox.setTexture('attackLine1');
 
-        let hbx = 52;
-        let hby = 70;
+        // --- POSITION HITBOX IN FRONT OF PLAYER ---
+        this.attackHitbox.setPosition(
+            this.player.x + dir.x * distance,
+            this.player.y + dir.y * distance
+        );
 
-        const distance = 16; // 8 tiles away (assuming 16px tiles)
+        // --- HITBOX SIZE (Rotate based on facing direction) ---
+        const isHorizontal = Math.abs(dir.x) > Math.abs(dir.y);
+        this.attackHitbox.setSize(isHorizontal ? w : h, isHorizontal ? h : w);
 
-        // Position PNG in front of player
-        this.attackHitbox.x = this.player.x + dir.x * distance;
-        this.attackHitbox.y = this.player.y + dir.y * distance;
+        // --- OPTIONAL: Rotate sprite visually ---
+        this.attackHitbox.setAngle(Phaser.Math.RadToDeg(dir.angle()));
 
-        // --- HITBOX SIZE BASED ON DIRECTION ---
-        if (Math.abs(dir.x) > Math.abs(dir.y)) {
-            // Facing LEFT or RIGHT
-            // Use original size (32 W × 64 H)
-            this.attackHitbox.setSize(hbx, hby);
-        } else {
-            // Facing UP or DOWN
-            // Swap width and height (64 W × 32 H)
-            this.attackHitbox.setSize(hby, hbx);
-        }
-
-        // OPTIONAL: rotate sprite visually, if needed  
-        this.attackHitbox.angle = Phaser.Math.RadToDeg(dir.angle());
-
-        // Activate hitbox
+        // Enable hitbox
         this.attackHitbox.setVisible(true);
         this.attackHitbox.body.enable = true;
 
-        this.time.delayedCall(50, () => {
-            this.attackHitbox.setTexture('attackLine2');
-        });
+        // --- ATTACK SPRITE ANIMATION ---
+        this.time.delayedCall(50, () => this.attackHitbox.setTexture('attackLine2'));
+        this.time.delayedCall(100, () => this.attackHitbox.setTexture('attackLine3'));
 
-        this.time.delayedCall(100, () => {
-            this.attackHitbox.setTexture('attackLine3');
-        });
-
-        // Hide after 200ms
-        this.time.delayedCall(250, () => {
+        // --- DISABLE HITBOX ---
+        this.time.delayedCall(150, () => {
             this.attackHitbox.setVisible(false);
             this.attackHitbox.body.enable = false;
         });
     }
+
 }
