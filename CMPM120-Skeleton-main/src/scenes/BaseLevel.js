@@ -175,11 +175,7 @@ export class BaseLevel extends Phaser.Scene {
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < 32 && Phaser.Input.Keyboard.JustDown(this.interact)) {
-
-                //--------------------------------------------------
-                //   NPC-SPECIFIC INTERACTION LOGIC
-                //--------------------------------------------------
-
+                //NPC-SPECIFIC INTERACTION LOGIC
                 // Water girl – first interaction
                 if (npc === this.girl && !this.talkedToGirl) {
                     this.talkedToGirl = true;
@@ -207,7 +203,6 @@ export class BaseLevel extends Phaser.Scene {
                         this.librarian.message = "Good luck on your journey!";
                     }
                 }
-
 
                 // Rich Girl – first conversation
                 if (npc === this.richGirl && !this.talkRich) {

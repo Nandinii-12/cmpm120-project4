@@ -27,8 +27,8 @@ export class Level1Dupe extends BaseLevel {
 
         // Center on screen
         this.keyText.setPosition(
-            (this.cameras.main.width / 2 - this.keyText.width / 2)+150,
-            (this.cameras.main.height / 2 - this.keyText.height / 2)-55
+            (this.cameras.main.width / 2 - this.keyText.width / 2)+250,
+            (this.cameras.main.height / 2 - this.keyText.height / 2)-100
         );
 
         // Fix it to camera
