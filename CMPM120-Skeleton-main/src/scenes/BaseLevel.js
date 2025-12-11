@@ -50,7 +50,7 @@ export class BaseLevel extends Phaser.Scene {
         } else {
             this.setPlayerMovement(50);
         }
-        this.setPlayerMovement(500);
+        this.setPlayerMovement(50);
         this.setInteractionArea();
 
         // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
@@ -58,11 +58,6 @@ export class BaseLevel extends Phaser.Scene {
         // console.log(this.player.body.velocity.x, this.player.body.velocity.y)
     }
 
-    checkKills(){
-        if(this.player.kills >= 12){
-
-        }
-    }
 
     makeTilemap() {
         this.map = this.add.tilemap(this.mapName);
@@ -314,7 +309,7 @@ export class BaseLevel extends Phaser.Scene {
         this.addPlayerAnimation();
 
         // Regular collisions
-        // this.physics.add.collider(this.player, this.obstaclesLayer);
+        this.physics.add.collider(this.player, this.obstaclesLayer);
 
         // Damage collisions
         this.physics.add.collider(this.player, this.damageLayer, (p, t) => this.damagePlayer(p, t, this.time.now), null, this);
