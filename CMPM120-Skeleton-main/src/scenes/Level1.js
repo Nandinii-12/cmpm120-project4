@@ -109,7 +109,7 @@ export class Level1 extends BaseLevel {
         this.richGirl = this.addNPC(
             "NPC_2",
             320,
-            240,
+            235,
             "Please help me find my gold coins!\nI lost 25 of them!"
         );
 

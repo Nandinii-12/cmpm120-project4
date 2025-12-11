@@ -246,7 +246,7 @@ export class BaseLevel extends Phaser.Scene {
                 // Center on screen
                 label.setPosition(
                     (this.cameras.main.width / 2 - label.width / 2),
-                    (this.cameras.main.height / 2 - label.height / 2) + 60
+                    (this.cameras.main.height / 2 - label.height / 2) + 100
                 );
 
                 // Keep fixed to camera
