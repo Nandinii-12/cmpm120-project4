@@ -58,6 +58,12 @@ export class BaseLevel extends Phaser.Scene {
         // console.log(this.player.body.velocity.x, this.player.body.velocity.y)
     }
 
+    checkKills(){
+        if(this.player.kills >= 12){
+
+        }
+    }
+
     makeTilemap() {
         this.map = this.add.tilemap(this.mapName);
 
@@ -303,7 +309,6 @@ export class BaseLevel extends Phaser.Scene {
 
         // this.player.setOffset(0, 0);
 
-        this.player.key = false;
         this.player.coins = 0;
         this.player.health = 10;
         this.addPlayerAnimation();
