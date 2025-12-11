@@ -22,7 +22,7 @@ const config = {
                 x: 0,
                 y: 0
             },
-            debug: true
+            debug: false
         }
     },
     scene: [Start, Level1, librarySub, Level1Dupe, Level2, Win, GameOver],
