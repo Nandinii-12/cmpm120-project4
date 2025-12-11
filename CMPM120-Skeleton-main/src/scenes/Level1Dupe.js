@@ -8,6 +8,8 @@ export class Level1Dupe extends BaseLevel {
     create() {
         super.create();
 
+        this.libraryExit = { x: 1030, y: 350 };
+
         if (this.registry.get("spawnAtLibraryExit"))
         {
             this.player.setPosition(this.libraryExit.x, this.libraryExit.y);
@@ -41,7 +43,6 @@ export class Level1Dupe extends BaseLevel {
         );
 
         this.librarian.setImmovable(true);
-        this.libraryExit = { x: 1030, y: 330 };
 
         //Guard 
         this.guard = this.addNPC(
@@ -58,7 +59,7 @@ export class Level1Dupe extends BaseLevel {
             "NPC_2",
             320,
             240,
-            "Please help me find my gold coins!\nI lost 25 of them!"
+            "Thank you again!"
         );
 
         this.richGirl.setImmovable(true);

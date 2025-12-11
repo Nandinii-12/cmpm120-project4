@@ -192,10 +192,22 @@ export class BaseLevel extends Phaser.Scene {
                 }
 
                 // Librarian – unlock library access after 2 keys
-                if (npc === this.librarian && this.keysCollected === 2) {
+                if (npc === this.librarian && this.scene.key === "Level1" && this.keysCollected === 2) {
                     this.librarian.message = "I see you have two keys.\nCome inside the library, I have something for you.";
                     this.inLibrary = true;
                 }
+
+                // INSIDE LIBRARY – give 3rd key only once
+                if (npc === this.librarian && this.scene.key === "librarySub") {
+                    if (!this.librarianGivesKey) {
+                        this.librarian.message = "Here is the third key.";
+                        this.librarianGivesKey = true;
+                        this.gotKey = true;
+                    } else {
+                        this.librarian.message = "Good luck on your journey!";
+                    }
+                }
+
 
                 // Rich Girl – first conversation
                 if (npc === this.richGirl && !this.talkRich) {
