@@ -190,9 +190,23 @@ export class BaseLevel extends Phaser.Scene {
                         this.inLibrary = true;
                     }
 
-                    //Rich girl interaction condition
+                    //Rich girl interaction condition 1
                     if (npc === this.richGirl && !this.talkRich) {
                         this.talkRich = true;
+                    }
+
+                    //Rich girl interaction condition 2
+                    if (npc === this.richGirl && this.player.coins >= 25 && this.rKey == false) {
+                        this.richGirl.message = "Thank you for your help! Here is something valuable in return!\nI found this key, take it!";
+                        this.keysCollected++;
+                        this.registry.set("keysCollected", this.keysCollected);
+                        this.keyText.setText("Keys collected: " + this.keysCollected);
+                        this.rKey = true;
+                    }
+
+                    //Rich girl interaction condition 3
+                    if (npc === this.richGirl && this.rKey == true){
+                        this.richGirl.message = "Thank you again!";
                     }
 
                     this.dialogueActive = true;

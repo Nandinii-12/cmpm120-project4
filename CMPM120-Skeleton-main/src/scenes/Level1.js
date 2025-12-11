@@ -57,6 +57,7 @@ export class Level1 extends BaseLevel {
         this.inLibrary = false;
         this.gotKey = false;
         this.talkRich = false;
+        this.rKey = false;
 
         // Mayor
         this.mayor = this.addNPC(
