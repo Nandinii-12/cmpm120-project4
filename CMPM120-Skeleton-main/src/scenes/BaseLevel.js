@@ -30,7 +30,7 @@ export class BaseLevel extends Phaser.Scene {
         this.animFrameDuration = 240; // How fast tiles animates
         this.last_time = 0;
         this.dialogueActive = false;
-        this.keysCollected = this.registry.get("keysCollected") ?? 0;
+        this.keysCollected = this.registry.get("keysCollected") ?? 2;
 
         this.makeTilemap();
         this.setKeyboards();
