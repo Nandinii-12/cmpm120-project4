@@ -43,8 +43,8 @@ export class Level1 extends BaseLevel {
         );
 
         this.coinText.setPosition(
-            (this.cameras.main.width / 2 - this.keyText.width / 2)+150,
-            (this.cameras.main.height / 2 - this.keyText.height / 2)
+            (this.cameras.main.width / 2 - this.keyText.width / 2)+170,
+            (this.cameras.main.height / 2 - this.keyText.height / 2)-30
         );
 
         this.coinText.setScrollFactor(0); 
