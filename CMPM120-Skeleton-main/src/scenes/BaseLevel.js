@@ -166,102 +166,111 @@ export class BaseLevel extends Phaser.Scene {
         }
     }
 
-
     setInteractionArea() {
         for (let npc of this.npcs.getChildren()) {
+
+            // Check if the player is close enough
             const dx = this.player.x - npc.x;
             const dy = this.player.y - npc.y;
-            if (Math.sqrt(dx * dx + dy * dy) < 32) {
-                if (Phaser.Input.Keyboard.JustDown(this.interact)) {
-                    //Watergirl interaction condition
-                    if (npc === this.girl && !this.talkedToGirl) {
-                        this.talkedToGirl = true;
-                    }
+            const distance = Math.sqrt(dx * dx + dy * dy);
 
-                    //Guard interaction condition
-                    if (npc === this.guard && this.keysCollected == 3) {
-                        this.guard.message = "You have collected all three keys.\nYou may enter.";
-                        this.enter = true;
-                    }
+            if (distance < 32 && Phaser.Input.Keyboard.JustDown(this.interact)) {
 
-                    //Librarian interaction condition 1
-                    if (npc === this.librarian && this.keysCollected == 2) {
-                        this.librarian.message = "I see you have two keys collected.\nCome inside the library, I have something for you.";
-                        this.inLibrary = true;
-                    }
+                //--------------------------------------------------
+                //   NPC-SPECIFIC INTERACTION LOGIC
+                //--------------------------------------------------
 
-                    //Rich girl interaction condition 1
-                    if (npc === this.richGirl && !this.talkRich) {
-                        this.talkRich = true;
-                    }
+                // Water girl – first interaction
+                if (npc === this.girl && !this.talkedToGirl) {
+                    this.talkedToGirl = true;
+                }
 
-                    //Rich girl interaction condition 2
-                    if (npc === this.richGirl && this.player.coins >= 25 && this.rKey == false) {
-                        this.richGirl.message = "Thank you for your help! Here is something valuable in return!\nI found this key, take it!";
+                // Guard – only reacts when player has all 3 keys
+                if (npc === this.guard && this.keysCollected === 3) {
+                    this.guard.message = "You have collected all three keys.\nYou may enter.";
+                    this.enter = true;
+                }
+
+                // Librarian – unlock library access after 2 keys
+                if (npc === this.librarian && this.keysCollected === 2) {
+                    this.librarian.message = "I see you have two keys.\nCome inside the library, I have something for you.";
+                    this.inLibrary = true;
+                }
+
+                // Rich Girl – first conversation
+                if (npc === this.richGirl && !this.talkRich) {
+                    this.talkRich = true;
+                }
+
+                // Rich Girl – after key already received
+                if (npc === this.richGirl && this.rKey) {
+                    this.richGirl.message = "Thank you again!";
+                }
+
+                // Rich Girl – gives key after 25 coins
+                if (npc === this.richGirl && this.player.coins >= 25 && !this.rKey) {
+                    this.richGirl.message = "Thank you for your help! Here is something valuable in return!\nI found this key, take it!";
+                    this.keysCollected++;
+                    this.registry.set("keysCollected", this.keysCollected);
+                    this.keyText.setText("Keys collected: " + this.keysCollected);
+                    this.rKey = true;
+                    this.coinText.setVisible(false);
+                }
+
+                //SHOW DIALOGUE TEXT
+                this.dialogueActive = true;
+
+                let label = this.add.text(0, 0, npc.message, {
+                    fontFamily: 'Arial',
+                    fontSize: '12px',
+                    color: '#ffffff',
+                    backgroundColor: '#000000',
+                    padding: { x: 10, y: 6 },
+                    align: 'center',
+                });
+
+                // Center on screen
+                label.setPosition(
+                    (this.cameras.main.width / 2 - label.width / 2),
+                    (this.cameras.main.height / 2 - label.height / 2) + 60
+                );
+
+                // Keep fixed to camera
+                label.setScrollFactor(0);
+
+                //END DIALOGUE AFTER 4s
+                this.time.delayedCall(4000, () => {
+                    label.destroy();
+                    this.dialogueActive = false;
+
+                    // Water girl – give key after delivery
+                    if (this.bucketDelivered && npc === this.girl) {
                         this.keysCollected++;
                         this.registry.set("keysCollected", this.keysCollected);
                         this.keyText.setText("Keys collected: " + this.keysCollected);
-                        this.rKey = true;
+                        this.girl.destroy();
                     }
 
-                    //Rich girl interaction condition 3
-                    if (npc === this.richGirl && this.rKey == true){
-                        this.richGirl.message = "Thank you again!";
+                    // Enter castle
+                    if (this.enter) {
+                        this.scene.start("Level2");
                     }
 
-                    this.dialogueActive = true;
+                    // Enter library
+                    if (this.inLibrary) {
+                        this.scene.start("librarySub");
+                    }
 
-                    let label = this.add.text(0, 0, npc.message, {
-                        fontFamily: 'Arial',
-                        fontSize: '12px',
-                        color: '#ffffff',
-                        backgroundColor: '#000000',
-                        padding: { x: 10, y: 6 },
-                        align: 'center',
-                    });
+                    // Leaving library with key
+                    if (this.gotKey) {
+                        this.keysCollected++;
+                        this.registry.set("keysCollected", this.keysCollected);
+                        this.keyText.setText("Keys collected: " + this.keysCollected);
 
-                    // Center on screen
-                    label.setPosition(
-                        (this.cameras.main.width / 2 - label.width / 2),
-                        (this.cameras.main.height / 2 - label.height / 2) + 60
-                    );
-
-                    // Fix it to camera
-                    label.setScrollFactor(0);
-
-                    // Remove after 4 seconds
-                    this.time.delayedCall(4000, () => {
-                        label.destroy();
-                        this.dialogueActive = false;
-                        //Adds watergirl key and gets rid of watergirl NPC
-                        if (this.bucketDelivered) {
-                            this.keysCollected++;
-                            this.registry.set("keysCollected", this.keysCollected);
-                            this.keyText.setText("Keys collected: " + this.keysCollected);
-                            this.girl.destroy();
-                        }
-
-                        //Checks if enter is true
-                        if (this.enter) {
-                            this.scene.start('Level2');
-                        }
-
-                        //Checks if inLibrary is true
-                        if (this.inLibrary) {
-                            this.scene.start('librarySub');
-                        }
-
-                        //Checks if gotKey is true
-                        if (this.gotKey) {
-                            this.keysCollected++;
-                            this.registry.set("keysCollected", this.keysCollected);
-                            this.keyText.setText("Keys collected: " + this.keysCollected);
-
-                            this.registry.set("spawnAtLibraryExit", true);
-                            this.scene.start('Level1');
-                        }
-                    });
-                }
+                        this.registry.set("spawnAtLibraryExit", true);
+                        this.scene.start("Level1");
+                    }
+                });
             }
         }
     }
