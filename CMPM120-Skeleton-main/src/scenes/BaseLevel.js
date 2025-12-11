@@ -106,9 +106,10 @@ export class BaseLevel extends Phaser.Scene {
         return npc;
     }
 
-    addKnight(name, x, y) {
+    addKnight(name, x, y, area = 100) {
         let knight = this.physics.add.sprite(x, y, `${name}`);
         knight.health = 5;
+        knight.area = area;
         knight.lastDamageTime = 0;
         knight.damageCoolDown = 500;
         knight.canMove = true;
@@ -126,7 +127,7 @@ export class BaseLevel extends Phaser.Scene {
         return knight;
     }
 
-    setKnightAttackArea(speed = 40, area = 112) {
+    setKnightAttackArea(speed = 40) {
 
         for (let knight of this.knights.getChildren()) {
             if (knight.canMove === true) {
@@ -135,7 +136,7 @@ export class BaseLevel extends Phaser.Scene {
                 const dy = this.player.y - knight.yorigin;
                 const distanceToOrigin = Math.hypot(dx, dy);
 
-                if (distanceToOrigin < area) {
+                if (distanceToOrigin < knight.area) {
                     // ---- CHASE PLAYER ----
                     const cx = this.player.x - knight.x;
                     const cy = this.player.y - knight.y;
@@ -595,8 +596,8 @@ export class BaseLevel extends Phaser.Scene {
         let dir = this.player.lastDir.clone().normalize();
         this.attackHitbox.setTexture('attackLine1');
 
-        let hbx = 48;
-        let hby = 64;
+        let hbx = 52;
+        let hby = 70;
 
         const distance = 16; // 8 tiles away (assuming 16px tiles)
 
@@ -637,29 +638,4 @@ export class BaseLevel extends Phaser.Scene {
             console.log("Disable");
         });
     }
-<<<<<<< HEAD
-
-    collectMushroom(player, mush) {
-        if (!this.startedMushroomQuest) return;
-
-        mush.destroy();
-        this.mushroomsCollected++;
-
-        // Optional XP-style popup
-        let popup = this.add.text(player.x, player.y - 20, "+1 mushroom", {
-            fontSize: "12px",
-            color: "#00ff00",
-            stroke: "#000",
-            strokeThickness: 4
-        });
-        popup.setDepth(999);
-
-        this.time.delayedCall(800, () => popup.destroy());
-
-        if (this.mushroomsCollected >= this.mushroomsNeeded) {
-            this.helpedMushroomNPC = true;
-        }
-    }
-=======
->>>>>>> 991c7a9c8612c3ff4f89251a38689582ae379515
 }

@@ -23,8 +23,9 @@ export class Level2 extends BaseLevel {
     }
 
     setUpKnights() {
-        this.knight1 = this.addKnight("Knight_1", 174, 276);
-        this.knight2 = this.addKnight("Knight_2", 174, 286);
+        this.knight1 = this.addKnight("Knight_1", 174, 276, 112);
+        this.knight2 = this.addKnight("Knight_2", 174, 286, 112);
+        this.knight3 = this.addKnight("Knight_1", 420, 200, 80);
     }
 }
 
