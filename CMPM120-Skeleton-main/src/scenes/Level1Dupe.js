@@ -58,7 +58,7 @@ export class Level1Dupe extends BaseLevel {
         this.richGirl = this.addNPC(
             "NPC_2",
             320,
-            240,
+            235,
             "Thank you again!"
         );
 
