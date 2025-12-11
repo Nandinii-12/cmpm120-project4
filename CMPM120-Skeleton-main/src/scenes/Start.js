@@ -15,8 +15,14 @@ export class Start extends Phaser.Scene {
             color: '#ffffffff'
         }).setOrigin(0.5);
 
+        //Context
+        this.add.text(1280 / 2, (720 / 2) + 20, 'Use WASD to move, LSHIFT to sprint, E to interact, and SPACE to attack.', {
+            fontSize: '20px',
+            color: '#ffffffff'
+        }).setOrigin(0.5);
+
         //Start Button
-        const startText = this.add.text(1280 / 2, (720 / 2) + 50, 'START GAME', {
+        const startText = this.add.text(1280 / 2, (720 / 2) + 70, 'START GAME', {
             fontSize: '40px',
             color: '#0080ff',
             fontStyle: 'bold',
@@ -25,7 +31,7 @@ export class Start extends Phaser.Scene {
         }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
         //Level select button
-        const levelText = this.add.text(1280 / 2, (720 / 2) + 110, 'Select Level', {
+        const levelText = this.add.text(1280 / 2, (720 / 2) + 130, 'Select Level', {
             fontSize: '30px',
             color: '#0080ff',
             fontStyle: 'bold',
@@ -34,14 +40,14 @@ export class Start extends Phaser.Scene {
         }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
         //Lvl select buttons (hidden at first)
-        const level1Text = this.add.text((1280 / 2) - 100, (720 / 2) + 140, 'Town', {
+        const level1Text = this.add.text((1280 / 2) - 100, (720 / 2) + 170, 'Town', {
             fontSize: '20px',
             color: '#0080ff',
             backgroundColor: '#00000055',
             padding: { x: 20, y: 10 }
         }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setVisible(false);
 
-        const level2Text = this.add.text((1280 / 2) + 80, (720 / 2) + 140, 'Castle', {
+        const level2Text = this.add.text((1280 / 2) + 80, (720 / 2) + 170, 'Castle', {
             fontSize: '20px',
             color: '#0080ff',
             backgroundColor: '#00000055',
