@@ -8,6 +8,42 @@ export class Level2 extends BaseLevel {
     create() {
         super.create();
         this.setUpKnights();
+
+        this.healthText = this.add.text(0, 0, "HP: " + this.player.health, {
+            fontFamily: 'Arial',
+            fontSize: '12px',
+            color: '#ffffff',
+            backgroundColor: '#000000',
+            padding: { x: 2, y: 2 },
+            align: 'center',
+        });
+
+        // Center on screen
+        this.healthText.setPosition(
+            (this.cameras.main.width / 2 - this.healthText.width / 2)+250,
+            (this.cameras.main.height / 2 - this.healthText.height / 2)-100
+        );
+
+        // Fix it to camera
+        this.healthText.setScrollFactor(0);
+
+        this.playerKills = this.add.text(0, 0, "Kills: " + this.player.kills, {
+            fontFamily: 'Arial',
+            fontSize: '12px',
+            color: '#ffffff',
+            backgroundColor: '#000000',
+            padding: { x: 2, y: 2 },
+            align: 'center',
+        });
+
+        // Center on screen
+        this.playerKills.setPosition(
+            (this.cameras.main.width / 2 - this.playerKills.width / 2)+250,
+            (this.cameras.main.height / 2 - this.playerKills.height / 2)-120
+        );
+
+        // Fix it to camera
+        this.playerKills.setScrollFactor(0);
     }
 
     update() {
@@ -25,6 +61,10 @@ export class Level2 extends BaseLevel {
     checkEndGame(){
         if(this.player.kills === 12){
             this.scene.start('Win');
+        }
+
+        if(this.player.health === 0){
+            this.scene.start('GameOver');
         }
     }
     setUpKnights() {

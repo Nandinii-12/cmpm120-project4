@@ -134,7 +134,6 @@ export class BaseLevel extends Phaser.Scene {
     }
 
     setKnightAttackArea(speed = 40) {
-
         for (let knight of this.knights.getChildren()) {
             if (knight.canMove === true) {
                 // Distance from player to knight's ORIGIN
@@ -367,6 +366,7 @@ export class BaseLevel extends Phaser.Scene {
 
         // Deal 1 damage
         player.health = Math.max(0, player.health - 1);
+        this.healthText.setText("HP: " + this.player.health);
 
         // Flash effect
         player.setTint(0xff5555);
@@ -420,6 +420,7 @@ export class BaseLevel extends Phaser.Scene {
         this.time.delayedCall(500, () => {
             if (knight.health <= 0) {
                 ++this.player.kills;
+                this.playerKills.setText("Kills: " + this.player.kills);
                 knight.destroy();
                 return;
             }
