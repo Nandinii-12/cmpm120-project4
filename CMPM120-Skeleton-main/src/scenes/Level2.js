@@ -59,7 +59,7 @@ export class Level2 extends BaseLevel {
     }
 
     checkEndGame(){
-        if(this.player.kills === 12){
+        if(this.player.kills === 10){
             this.scene.start('Win');
         }
 
@@ -79,7 +79,7 @@ export class Level2 extends BaseLevel {
         this.knight9 = this.addKnight((Math.random() < 0.5) ? "Knight_1" : "Knight_2", 1030, 930);
         this.knight10 = this.addKnight((Math.random() < 0.5) ? "Knight_1" : "Knight_2", 954, 760);
         this.knight11 = this.addKnight((Math.random() < 0.5) ? "Knight_1" : "Knight_2", 500, 1030);
-        this.knight11 = this.addKnight((Math.random() < 0.5) ? "Knight_1" : "Knight_2", 500, 1014);        
+        this.knight12 = this.addKnight((Math.random() < 0.5) ? "Knight_1" : "Knight_2", 500, 1014);        
     }
 
 }
