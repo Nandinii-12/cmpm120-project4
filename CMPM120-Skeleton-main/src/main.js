@@ -25,7 +25,7 @@ const config = {
             debug: true
         }
     },
-    scene: [librarySub, Start, Level1, Level1Dupe, Level2, Win, GameOver],
+    scene: [Start, Level1, librarySub, Level1Dupe, Level2, Win, GameOver],
     scale: {
         mode: Phaser.Scale.ENVELOP,
         autoCenter: Phaser.Scale.CENTER_BOTH

@@ -61,6 +61,6 @@
 
 - Collectibles (2) - Overall, we did have collectible items in the first level (water bucket and coins), each as a mini game giving rewards. Unlike our original plan, we deviated from "collecting" a princess, and decided to make the second level more combat based, since we felt it made the game more well rounded. ✅
 
-- Puzzle solving and interaction (3) - ✅
+- Puzzle solving and interaction (3) - We made NPCs able to interact. We implemented tasks from the NPCs in order to get 3 keys to unlock next level. Tasks includes collection coins, collecting item, and interacting with the NPC to get keys✅
 
 
