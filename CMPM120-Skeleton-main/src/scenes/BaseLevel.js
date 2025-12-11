@@ -48,9 +48,9 @@ export class BaseLevel extends Phaser.Scene {
             this.player.play('idle', true);
             return;
         } else {
-            this.setPlayerMovement(50);
+            this.setPlayerMovement(70);
         }
-        this.setPlayerMovement(50);
+        this.setPlayerMovement(70);
         this.setInteractionArea();
 
         // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
