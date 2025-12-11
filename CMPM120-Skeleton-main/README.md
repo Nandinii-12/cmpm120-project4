@@ -23,7 +23,7 @@
     - 2 points: The game works smoothly and well, it doesn't have bugs and the storyline makes sense. ✅
 
 - 2 points - Individual Execution: What did each individual student contribute? ✅
-    - Nandini:
+    # Nandini:
         - Designed level 1 and half of level 2
         - Designed part of the library 
         - Created the plot/flow of the game's story
@@ -36,7 +36,7 @@
         - Coded transititons between screens 
         - Made displays for player health and kills in lvl 2
     
-    - Worapas: 
+    # Worapas: 
         - Player movement (W, A, S, D, Sprint, Attack)
         - Keyboard interactions
         - Designed half of level 2
@@ -61,4 +61,4 @@
 
 - Puzzle solving and interaction (3) - We made NPCs able to interact. We implemented tasks from the NPCs in order to get 3 keys to unlock next level. Tasks includes collection coins, collecting item, and interacting with the NPC to get keys. One point for each task.✅
 
-- Map Design (2) - The setting of the game is very important to our plot. We had to make sure the map designs is detailed and match what we are trying to 
+- Map Design (2) - The setting of our game was a driving focus for our plot, seeing how the genre of it is a top-down RPG. We had to make sure that the map designs were detailed and matched the storyline we were trying to present to the audience. We split up the maps and occasionally collaborated on some parts in order to present the ideal setting for our game. ✅
