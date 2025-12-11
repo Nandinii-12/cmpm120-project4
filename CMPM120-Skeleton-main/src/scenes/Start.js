@@ -10,7 +10,7 @@ export class Start extends Phaser.Scene {
         }).setOrigin(0.5);
 
         //Context
-        this.add.text(1280 / 2, (720 / 2) -20, 'Infiltrate the castle and claim the throne', {
+        this.add.text(1280 / 2, (720 / 2) -20, 'Infiltrate the castle and become the new ruler of Tiny Town!', {
             fontSize: '30px',
             color: '#ffffffff'
         }).setOrigin(0.5);
