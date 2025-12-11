@@ -17,7 +17,8 @@ export class Level2 extends BaseLevel {
 
 
 
-        console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
+        // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
+        console.log(this.player.kills);
         // console.log("Health: " + this.player.health + "\nCoins: " + this.player.coins + "\nHearts: " + this.player.health);
         // console.log(this.player.body.velocity.x, this.player.body.velocity.y)
     }
@@ -34,8 +35,7 @@ setUpKnights() {
     this.knight9 = this.addKnight((Math.random() < 0.5) ? "Knight_1" : "Knight_2", 1030, 930);
     this.knight10 = this.addKnight((Math.random() < 0.5) ? "Knight_1" : "Knight_2", 954, 760);
     this.knight11 = this.addKnight((Math.random() < 0.5) ? "Knight_1" : "Knight_2", 500, 1030);
+    this.knight11 = this.addKnight((Math.random() < 0.5) ? "Knight_1" : "Knight_2", 500, 1014);
 }
 
 }
-
-//Untested

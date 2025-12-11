@@ -270,6 +270,7 @@ export class BaseLevel extends Phaser.Scene {
     setUpPlayer() {
         this.player = this.physics.add.sprite(300, 1040, 'player');
         this.player.canMove = true;
+        this.player.kills = 0;
         this.player.lastDir = new Phaser.Math.Vector2(1, 0); // default facing right
         this.player.setSize(10, 10);
         this.attackHitbox = this.physics.add.sprite(0, 0, 'attackLine1');
@@ -291,7 +292,7 @@ export class BaseLevel extends Phaser.Scene {
         this.addPlayerAnimation();
 
         // Regular collisions
-        this.physics.add.collider(this.player, this.obstaclesLayer);
+        // this.physics.add.collider(this.player, this.obstaclesLayer);
 
         // Damage collisions
         this.physics.add.collider(this.player, this.damageLayer, (p, t) => this.damagePlayer(p, t, this.time.now), null, this);
@@ -361,10 +362,10 @@ export class BaseLevel extends Phaser.Scene {
 
     damageKnight(player, knight, time) {
 
-        if (knight.health <= 0) {
-            knight.destroy();
-            return;
-        }
+        // if (knight.health <= 0) {
+        //     knight.destroy();
+        //     return;
+        // }
         console.log(knight.health);
 
         if (!knight.canMove) {
@@ -397,6 +398,7 @@ export class BaseLevel extends Phaser.Scene {
 
         this.time.delayedCall(500, () => {
             if (knight.health <= 0) {
+                ++this.player.kills;
                 knight.destroy();
                 return;
             }
@@ -643,7 +645,7 @@ export class BaseLevel extends Phaser.Scene {
         });
 
         // Hide after 200ms
-        this.time.delayedCall(200, () => {
+        this.time.delayedCall(250, () => {
             this.attackHitbox.setVisible(false);
             this.attackHitbox.body.enable = false;
             console.log("Disable");
