@@ -14,7 +14,7 @@ export class Level1 extends BaseLevel {
             this.registry.set("spawnAtLibraryExit", false); // reset flag
         }
 
-        this.keyText = this.add.text(0, 0, "Keys collected: " + this.keysCollected, {
+        this.coinText = this.add.text(0, 0, "Coins collected: " + this.player.coins, {
             fontFamily: 'Arial',
             fontSize: '9px',
             color: '#ffffff',
@@ -24,13 +24,13 @@ export class Level1 extends BaseLevel {
         });
 
         // Center on screen
-        this.keyText.setPosition(
-            (this.cameras.main.width / 2 - this.keyText.width / 2)+150,
-            (this.cameras.main.height / 2 - this.keyText.height / 2)-55
+        this.coinText.setPosition(
+            (this.cameras.main.width / 2 - this.coinText.width / 2)+150,
+            (this.cameras.main.height / 2 - this.coinText.height / 2)-55
         );
 
         // Fix it to camera
-        this.keyText.setScrollFactor(0);
+        this.coinText.setScrollFactor(0);
 
         this.coinText = this.add.text(0, 0, "Coins: " + this.player.coins + "/ 25", {
                 fontFamily: 'Arial',
@@ -43,8 +43,8 @@ export class Level1 extends BaseLevel {
         );
 
         this.coinText.setPosition(
-            (this.cameras.main.width / 2 - this.keyText.width / 2)+170,
-            (this.cameras.main.height / 2 - this.keyText.height / 2)-30
+            (this.cameras.main.width / 2 - this.coinText.width / 2)+170,
+            (this.cameras.main.height / 2 - this.coinText.height / 2)-30
         );
 
         this.coinText.setScrollFactor(0); 
