@@ -2,6 +2,7 @@ import { Level1 } from "./scenes/Level1.js";
 import { Level2 } from "./scenes/Level2.js";
 import { librarySub } from "./scenes/librarySub.js";
 import { Level1Dupe } from "./scenes/Level1Dupe.js";
+import { Start } from "./scenes/Start.js";
 
 const config = {
     type: Phaser.AUTO,
@@ -22,7 +23,7 @@ const config = {
             debug: true
         }
     },
-    scene: [/*GameMenu,*/ Level2, librarySub, Level1Dupe, Level1 /*, Win, GameOver */],
+    scene: [Start, Level1, librarySub, Level1Dupe, Level2 /*, Win, GameOver */],
     scale: {
         mode: Phaser.Scale.ENVELOP,
         autoCenter: Phaser.Scale.CENTER_BOTH
