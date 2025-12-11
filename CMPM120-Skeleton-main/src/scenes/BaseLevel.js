@@ -381,7 +381,6 @@ export class BaseLevel extends Phaser.Scene {
         });
     }
 
-
     damageKnight(player, knight, time) {
 
         // if (knight.health <= 0) {
@@ -558,8 +557,6 @@ export class BaseLevel extends Phaser.Scene {
             this.player.play('idle', true);
         }
     }
-
-
 
     updateAnimatedTiles(delta) {
         this.animTimer += delta;
