@@ -14,11 +14,19 @@ export class Level2 extends BaseLevel {
         super.update();
         this.setKnightAttackArea();
 
+        this.checkEndGame();
+
         // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
         // console.log("Health: " + this.player.health + "\nCoins: " + this.player.coins + "\nHearts: " + this.player.health);
         // console.log(this.player.body.velocity.x, this.player.body.velocity.y)
+
     }
 
+    checkEndGame(){
+        if(this.player.kills === 12){
+            this.scene.start('Start');
+        }
+    }
     setUpKnights() {
         this.knight1 = this.addKnight((Math.random() < 0.5) ? "Knight_1" : "Knight_2", 174, 276);
         this.knight2 = this.addKnight((Math.random() < 0.5) ? "Knight_1" : "Knight_2", 174, 286);
