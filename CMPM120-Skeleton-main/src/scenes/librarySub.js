@@ -6,7 +6,7 @@ export class librarySub extends BaseLevel {
     }
 
     create() {
-        
+
         super.create();
 
         this.librarianGivesKey = false;
@@ -22,8 +22,8 @@ export class librarySub extends BaseLevel {
 
         // Center on screen
         this.keyText.setPosition(
-            (this.cameras.main.width / 2 - this.keyText.width / 2)+150,
-            (this.cameras.main.height / 2 - this.keyText.height / 2)-55
+            (this.cameras.main.width / 2 - this.keyText.width / 2) + 150,
+            (this.cameras.main.height / 2 - this.keyText.height / 2) - 55
         );
 
         // Fix it to camera
@@ -40,5 +40,14 @@ export class librarySub extends BaseLevel {
         );
         this.gotKey = true;
         this.librarian.setImmovable(true);
+    }
+
+
+    update() {
+        super.update();
+        if (this.scene.isActive("librarySub")) {
+            console.log("Library");
+            this.cameras.main.setZoom(3);
+        }
     }
 }

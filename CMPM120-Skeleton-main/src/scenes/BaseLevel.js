@@ -55,7 +55,7 @@ export class BaseLevel extends Phaser.Scene {
 
         // console.log(parseInt(this.player.x) + ', '+ parseInt(this.player.y));
         //console.log("Health: " + this.player.health + "\nCoins: " + this.player.coins + "\nHearts: " + this.player.health);
-        // console.log(this.player.body.velocity.x, this.player.body.velocity.y)
+        console.log(this.scene.isActive("librarySub"));
     }
 
 
@@ -330,10 +330,7 @@ export class BaseLevel extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.startFollow(this.player, true);
         this.cameras.main.setDeadzone(100, 50);
-
-        
         this.cameras.main.setZoom(CAMERA_ZOOM);
-        
         
     }
 
