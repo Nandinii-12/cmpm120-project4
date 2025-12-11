@@ -258,6 +258,7 @@ export class BaseLevel extends Phaser.Scene {
 
                     // Enter library
                     if (this.inLibrary) {
+                        this.librarian.message = "Here is the third key.";
                         this.scene.start("librarySub");
                     }
 
@@ -268,7 +269,7 @@ export class BaseLevel extends Phaser.Scene {
                         this.keyText.setText("Keys collected: " + this.keysCollected);
 
                         this.registry.set("spawnAtLibraryExit", true);
-                        this.scene.start("Level1");
+                        this.scene.start("Level1Dupe");
                     }
                 });
             }

@@ -8,12 +8,6 @@ export class Level1 extends BaseLevel {
     create() {
         super.create();
 
-        if (this.registry.get("spawnAtLibraryExit"))
-        {
-            this.player.setPosition(this.libraryExit.x, this.libraryExit.y);
-            this.registry.set("spawnAtLibraryExit", false); // reset flag
-        }
-
         this.keyText = this.add.text(0, 0, "Keys collected: " + this.keysCollected, {
             fontFamily: 'Arial',
             fontSize: '9px',
