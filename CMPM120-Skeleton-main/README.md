@@ -12,6 +12,16 @@
 - Press E to interact with NPCs
 - Press the Spacebar to attack (used in level 2)
 
+# Game flow
+- Talk to the mayor to understand the premise of level 1
+- Talk to the girl by the well --> deliver her water (+1 key)
+- Go north and talk to the girl in the blue dress --> collect 25 coins around the map and talk to her again (+1 key)
+- Go east to the building above the market and talk to the man --> go inside the library
+- Talk to the man in the library --> (+1 key)
+- Go south and talk to the knight to go to level 2
+
+- Level 2: kill 12 knights to win!
+
 # Rubric Grading:
 - 1 points - Interaction: Is this a game that a player can do something in?
     - 1 point: This game involves a lot of player interaction. ✅
