@@ -24,7 +24,7 @@ export class Level2 extends BaseLevel {
 
     checkEndGame(){
         if(this.player.kills === 12){
-            this.scene.start('Start');
+            this.scene.start('Win');
         }
     }
     setUpKnights() {
