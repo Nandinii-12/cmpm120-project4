@@ -63,4 +63,4 @@
 
 - Puzzle solving and interaction (3) - We made NPCs able to interact. We implemented tasks from the NPCs in order to get 3 keys to unlock next level. Tasks includes collection coins, collecting item, and interacting with the NPC to get keys. One point for each task.✅
 
-
+- Map Design (2) - The setting of the game is very important to our plot. We had to make sure the map designs is detailed and match what we are trying to 
