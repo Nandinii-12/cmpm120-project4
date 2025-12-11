@@ -33,12 +33,26 @@
             - Sub-level with the library 
             - Flow from level 1 to level 2
         - Made the Start, Win, and Game Over screens
+        - Coded transititons between screens 
+        - Made displays for player health and kills in lvl 2
     
     - Worapas: 
+        - Player movement
+        - Keyboard interactions
+        - Designed half of level 2
+        - Designed sprite animation
+        - Designed NPCs 
     # WRITE YOUR CONTRIBUTIONS HERE
 
 # Personal Rubric Grading (10 pts):
-- Assets (2) - ✅
-- Top-down movement (1) - ✅
+- Assets (1) - We found and used many different assets off of the kenny assets. We mixed and matched in order to design our game. ✅
+
+- Top-down movement (1) - The player uses WASD to move, which is common for top-down RPGs.   We also implemented a sprinting mechanism, and attack using keyboard interaction as outlined above. ✅
+
+- Health System (1) - We implemented a health system in the second half of the game, making the player lose lives if they get attacked by the knights, and having the option of a lose screen. ✅
+
+- Collectibles (2) - Overall, we did have collectible items in the first level (water bucket and coins), each as a mini game giving rewards. Unlike our original plan, we deviated from "collecting" a princess, and decided to make the second level more combat based, since we felt it made the game more well rounded. ✅
+
+- Puzzle solving and interaction (3) - ✅
 
 
