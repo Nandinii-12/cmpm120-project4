@@ -8,6 +8,9 @@ export class Level2 extends BaseLevel {
     create() {
         super.create();
         this.setUpKnights();
+
+
+        
     }
 
     update() {
