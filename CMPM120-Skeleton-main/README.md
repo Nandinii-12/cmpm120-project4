@@ -50,8 +50,6 @@
         - Camera
         - Tilemap assets and layers
 
-    # WRITE YOUR CONTRIBUTIONS HERE
-
 # Personal Rubric Grading (10 pts):
 - Assets (1) - We found and used many different assets off of the kenny assets. We mixed and matched in order to design our game. ✅
 
