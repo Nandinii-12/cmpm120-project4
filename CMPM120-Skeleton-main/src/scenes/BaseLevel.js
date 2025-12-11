@@ -35,7 +35,7 @@ export class BaseLevel extends Phaser.Scene {
         this.makeTilemap();
         this.setKeyboards();
         this.setUpPlayer();
-        this.setCamera(3);
+        this.setCamera(2);
         this.setUpNPCs();
     }
 
