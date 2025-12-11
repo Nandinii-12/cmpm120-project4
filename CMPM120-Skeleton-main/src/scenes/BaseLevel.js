@@ -663,7 +663,6 @@ export class BaseLevel extends Phaser.Scene {
         this.time.delayedCall(250, () => {
             this.attackHitbox.setVisible(false);
             this.attackHitbox.body.enable = false;
-            console.log("Disable");
         });
     }
 }
